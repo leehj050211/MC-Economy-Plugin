@@ -1,0 +1,4 @@
+name: MCEconomy
+version: '${version}'
+main: leehj050211.mceconomy.MCEconomy
+api-version: '1.20'
