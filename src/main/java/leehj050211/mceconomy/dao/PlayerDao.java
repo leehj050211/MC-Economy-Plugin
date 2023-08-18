@@ -6,7 +6,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.util.Optional;
+
 public class PlayerDao {
+
     private static PlayerDao instance;
 
     private final SessionFactory sessionFactory;
@@ -28,5 +31,23 @@ public class PlayerDao {
         session.persist(playerData);
         transaction.commit();
         session.close();
+    }
+
+    public void update(PlayerData playerData) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        session.merge(playerData);
+        transaction.commit();
+        session.close();
+    }
+
+    public Optional<PlayerData> findByNickname(String nickname) {
+        Session session = sessionFactory.openSession();
+        Optional<PlayerData> playerData = session
+                .createQuery("FROM PlayerData WHERE nickname = :nickname", PlayerData.class)
+                .setParameter("nickname", nickname)
+                .uniqueResultOptional();
+        session.close();
+        return playerData;
     }
 }
