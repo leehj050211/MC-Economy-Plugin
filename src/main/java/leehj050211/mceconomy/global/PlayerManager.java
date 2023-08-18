@@ -12,16 +12,15 @@ import java.util.HashMap;
 public class PlayerManager {
 
     private static PlayerManager instance;
-
-    private static HashMap<Player, PlayerData> onlinePlayerData = new HashMap<>();
-    private final PlayerDao playerDao = PlayerDao.getInstance();
-
     public static PlayerManager getInstance() {
         if (instance == null) {
             instance = new PlayerManager();
         }
         return instance;
     }
+
+    private static final HashMap<Player, PlayerData> onlinePlayerData = new HashMap<>();
+    private final PlayerDao playerDao = PlayerDao.getInstance();
 
     public void addPlayer(Player player) {
         PlayerData playerData = playerDao.findByNickname(player.getName())

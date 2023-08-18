@@ -1,11 +1,16 @@
 package leehj050211.mceconomy.config;
 
 import leehj050211.mceconomy.domain.PlayerData;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HibernateUtil {
 
+    @Getter
     private static final SessionFactory sessionFactory;
 
     static {
@@ -24,9 +29,5 @@ public class HibernateUtil {
                 .addAnnotatedClass(PlayerData.class);
 
         sessionFactory = configuration.buildSessionFactory();;
-    }
-
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
     }
 }

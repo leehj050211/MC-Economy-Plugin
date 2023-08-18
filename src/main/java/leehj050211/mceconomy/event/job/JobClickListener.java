@@ -20,18 +20,17 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class JobClickListener implements Listener {
 
-    private final SelectJobGui selectJobGui = SelectJobGui.getInstance();
     private final PlayerManager playerManager = PlayerManager.getInstance();
     private final PlayerDao playerDao = PlayerDao.getInstance();
 
     @EventHandler
     public void onOpenJobList(OpenJobListEvent event) {
-        event.player.openInventory(selectJobGui.getInventory());
+        event.player.openInventory(SelectJobGui.getInventory());
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getInventory() != selectJobGui.getInventory()) return;
+        if (e.getInventory() != SelectJobGui.getInventory()) return;
         e.setCancelled(true);
         ItemStack item = e.getCurrentItem();
         if (item == null || item.getType() == Material.AIR) return;
@@ -50,7 +49,7 @@ public class JobClickListener implements Listener {
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent e) {
-        if (e.getInventory() == selectJobGui.getInventory()) {
+        if (e.getInventory() == SelectJobGui.getInventory()) {
             e.setCancelled(true);
         }
     }

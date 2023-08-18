@@ -18,18 +18,6 @@ import java.util.List;
 public class SelectJobGui implements Listener {
 
     private static SelectJobGui instance;
-
-    @Getter
-    private final Inventory inventory;
-
-    private SelectJobGui() {
-        inventory = Bukkit.createInventory(null, Math.max(9, JobType.values().length), "직업 선택");
-
-        for (JobType jobType : JobType.values()) {
-            inventory.addItem(getJobItem(jobType));
-        }
-    }
-
     public static SelectJobGui getInstance() {
         if (instance == null) {
             instance = new SelectJobGui();
@@ -37,7 +25,18 @@ public class SelectJobGui implements Listener {
         return instance;
     }
 
-    private ItemStack getJobItem(JobType jobType) {
+    @Getter
+    private static final Inventory inventory;
+
+    static {
+        inventory = Bukkit.createInventory(null, Math.max(9, JobType.values().length), "직업 선택");
+
+        for (JobType jobType : JobType.values()) {
+            inventory.addItem(getJobItem(jobType));
+        }
+    }
+
+    private static ItemStack getJobItem(JobType jobType) {
         ItemStack icon = new ItemStack(jobType.getIcon(), 1);
         ItemMeta meta = icon.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
