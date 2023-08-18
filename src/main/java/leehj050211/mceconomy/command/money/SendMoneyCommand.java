@@ -2,6 +2,8 @@ package leehj050211.mceconomy.command.money;
 
 import leehj050211.mceconomy.contant.ErrorMsgConstant;
 import leehj050211.mceconomy.domain.PlayerData;
+import leehj050211.mceconomy.exception.money.InvalidSendMoneyTargetException;
+import leehj050211.mceconomy.global.exception.OfflineTargetPlayerException;
 import leehj050211.mceconomy.global.player.PlayerManager;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
@@ -30,13 +32,11 @@ public class SendMoneyCommand implements CommandExecutor {
         String targetNickname = args[0];
         Player player = ((Player) sender).getPlayer();
         if (Objects.equals(player.getName(), targetNickname)) {
-            sender.sendMessage("같은 사람에게는 송금할 수 없습니다.");
-            return true;
+            throw new InvalidSendMoneyTargetException(player.getUniqueId());
         }
         Player target = Bukkit.getPlayer(targetNickname);
         if (target == null) {
-            sender.sendMessage(ErrorMsgConstant.OfflineTargetPlayer);
-            return true;
+            throw new OfflineTargetPlayerException(player.getUniqueId());
         }
 
         PlayerData playerData = playerManager.getData(player.getUniqueId());
@@ -45,7 +45,6 @@ public class SendMoneyCommand implements CommandExecutor {
         targetPlayerData.increaseMoney(sendAmount);
         player.sendMessage(String.format("%d원 송금 나 -> %s\n잔액: %d원", sendAmount, targetNickname, playerData.getMoney()));
         player.sendMessage(String.format("%d원 입금 %s -> 나\n잔액: %d원", sendAmount, playerData.getNickname(), targetPlayerData.getMoney()));
-
         return true;
     }
 }

@@ -1,4 +1,4 @@
-package leehj050211.mceconomy.exception;
+package leehj050211.mceconomy.exception.money;
 
 import leehj050211.mceconomy.global.exception.GeneralMCPlayerException;
 

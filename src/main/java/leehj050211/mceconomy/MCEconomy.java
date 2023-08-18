@@ -3,6 +3,7 @@ package leehj050211.mceconomy;
 import leehj050211.mceconomy.command.money.SendMoneyCommand;
 import leehj050211.mceconomy.event.job.JobClickListener;
 import leehj050211.mceconomy.event.player.PlayerJoinListener;
+import leehj050211.mceconomy.global.exception.CommandExceptionHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MCEconomy extends JavaPlugin {
@@ -19,7 +20,7 @@ public class MCEconomy extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new JobClickListener(), this);
-        getCommand("송금").setExecutor(new SendMoneyCommand());
+        getCommand("송금").setExecutor(new CommandExceptionHandler(new SendMoneyCommand()));
     }
 
     @Override

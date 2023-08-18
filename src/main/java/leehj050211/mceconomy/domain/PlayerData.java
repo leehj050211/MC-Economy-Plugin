@@ -6,9 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import leehj050211.mceconomy.domain.type.JobType;
 import leehj050211.mceconomy.domain.type.JobTypeConverter;
-import leehj050211.mceconomy.exception.InvalidMoneyException;
+import leehj050211.mceconomy.exception.money.InvalidMoneyException;
 import leehj050211.mceconomy.global.exception.GeneralMCPlayerException;
-import leehj050211.mceconomy.global.exception.MCExceptionHandler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +49,7 @@ public class PlayerData {
         if (money >= 0) {
             this.money += money;
         } else {
-            throw MCExceptionHandler.getInstance()
-                    .handleAndThrow(new InvalidMoneyException(this.uuid));
+            throw new InvalidMoneyException(this.uuid);
         }
     }
 
@@ -59,8 +57,7 @@ public class PlayerData {
         if (money >= 0 && this.money >= money) {
             this.money -= money;
         } else {
-            throw MCExceptionHandler.getInstance()
-                    .handleAndThrow(new InvalidMoneyException(this.uuid));
+            throw new InvalidMoneyException(this.uuid);
         }
     }
 }

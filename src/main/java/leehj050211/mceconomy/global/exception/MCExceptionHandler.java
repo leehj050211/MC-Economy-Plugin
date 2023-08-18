@@ -19,7 +19,7 @@ public class MCExceptionHandler {
 
     private final PlayerManager playerManager = PlayerManager.getInstance();
 
-    public GeneralMCPlayerException handleAndThrow(GeneralMCPlayerException exception) {
+    public GeneralMCPlayerException handle(GeneralMCPlayerException exception) {
         Player player = playerManager.getPlayer(exception.getUuid());
         String errorMsg = exception.getMessage();
         player.sendMessage(ChatColor.DARK_RED + "에러: " + errorMsg);
