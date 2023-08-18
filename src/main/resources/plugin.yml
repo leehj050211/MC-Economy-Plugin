@@ -2,3 +2,7 @@ name: MCEconomy
 version: '${version}'
 main: leehj050211.mceconomy.MCEconomy
 api-version: '1.20'
+commands:
+  송금:
+    description: 상대방에게 돈을 보낼 수 있습니다.
+    usage: /송금 <상대방 닉네임> <금액>

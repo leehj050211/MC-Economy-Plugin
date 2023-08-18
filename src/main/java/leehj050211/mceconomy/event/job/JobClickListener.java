@@ -5,7 +5,7 @@ import leehj050211.mceconomy.contant.JobConstant;
 import leehj050211.mceconomy.dao.PlayerDao;
 import leehj050211.mceconomy.domain.PlayerData;
 import leehj050211.mceconomy.domain.type.JobType;
-import leehj050211.mceconomy.global.PlayerManager;
+import leehj050211.mceconomy.global.player.PlayerManager;
 import leehj050211.mceconomy.gui.job.SelectJobGui;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -39,7 +39,7 @@ public class JobClickListener implements Listener {
         JobType jobType = JobType.valueOf(data.get(key, PersistentDataType.STRING));
 
         Player player = (Player) e.getWhoClicked();
-        PlayerData playerData = playerManager.getData(player);
+        PlayerData playerData = playerManager.getData(player.getUniqueId());
         playerData.updateJob(jobType);
         playerDao.update(playerData);
 

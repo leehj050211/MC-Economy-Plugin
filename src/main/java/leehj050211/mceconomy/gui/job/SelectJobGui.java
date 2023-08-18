@@ -32,11 +32,11 @@ public class SelectJobGui implements Listener {
         inventory = Bukkit.createInventory(null, Math.max(9, JobType.values().length), "직업 선택");
 
         for (JobType jobType : JobType.values()) {
-            inventory.addItem(getJobItem(jobType));
+            inventory.addItem(getJobIcon(jobType));
         }
     }
 
-    private static ItemStack getJobItem(JobType jobType) {
+    private static ItemStack getJobIcon(JobType jobType) {
         ItemStack icon = new ItemStack(jobType.getIcon(), 1);
         ItemMeta meta = icon.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
