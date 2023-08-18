@@ -6,7 +6,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -41,8 +43,16 @@ public class PlayerManager {
     }
 
     public void deletePlayer(Player player) {
+        playerDao.update(getData(player.getUniqueId()));
+
         onlinePlayer.remove(player.getUniqueId());
         onlinePlayerNickname.remove(player.getName());
+    }
+
+    public List<PlayerData> getAllData() {
+        return onlinePlayer.values().stream()
+                .map(PlayerWrapper::playerData)
+                .toList();
     }
 
     public PlayerData getData(UUID uuid) {

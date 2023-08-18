@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @Getter
-public class GeneralMCPlayerException extends Exception {
+public class GeneralMCPlayerException extends RuntimeException {
 
     private final UUID uuid;
 

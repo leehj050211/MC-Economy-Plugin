@@ -14,14 +14,12 @@ public class CommandExceptionHandler implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         try {
             return wrappedExecutor.onCommand(sender, command, label, args);
+        } catch (GeneralMCPlayerException exception) {
+            MCExceptionHandler.getInstance().handle(exception);
+            return true;
         } catch (Exception exception) {
-            if (exception instanceof GeneralMCPlayerException mcPlayerException) {
-                MCExceptionHandler.getInstance().handle(mcPlayerException);
-                return true;
-            } else {
-                exception.printStackTrace();
-                return false;
-            }
+            exception.printStackTrace();
+            return false;
         }
     }
 }

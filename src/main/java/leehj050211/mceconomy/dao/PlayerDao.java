@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.util.List;
 import java.util.Optional;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,6 +36,16 @@ public class PlayerDao {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.merge(playerData);
+        transaction.commit();
+        session.close();
+    }
+
+    public void updateAll(List<PlayerData> playerDataList) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        for (PlayerData playerData : playerDataList) {
+            session.merge(playerData);
+        }
         transaction.commit();
         session.close();
     }
