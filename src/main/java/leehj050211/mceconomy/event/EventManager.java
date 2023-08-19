@@ -1,10 +1,10 @@
 package leehj050211.mceconomy.event;
 
 import leehj050211.mceconomy.MCEconomy;
-import leehj050211.mceconomy.event.job.JobClickListener;
 import leehj050211.mceconomy.event.player.PlayerJoinListener;
 import leehj050211.mceconomy.event.player.PlayerKickListener;
 import leehj050211.mceconomy.event.player.PlayerQuitListener;
+import leehj050211.mceconomy.gui.job.SelectJobGui;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -21,7 +21,7 @@ public class EventManager {
                 new PlayerJoinListener(),
                 new PlayerQuitListener(),
                 new PlayerKickListener(),
-                new JobClickListener()
+                new SelectJobGui()
         };
 
         for (Listener listener : listeners) {

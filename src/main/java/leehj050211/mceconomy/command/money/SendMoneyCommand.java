@@ -47,7 +47,7 @@ public class SendMoneyCommand extends CustomCommandExecutor {
         playerData.decreaseMoney(sendAmount);
         targetPlayerData.increaseMoney(sendAmount);
         player.sendMessage(String.format("%d원 송금 나 -> %s\n잔액: %d원", sendAmount, targetNickname, playerData.getMoney()));
-        player.sendMessage(String.format("%d원 입금 %s -> 나\n잔액: %d원", sendAmount, playerData.getNickname(), targetPlayerData.getMoney()));
+        target.sendMessage(String.format("%d원 입금 %s -> 나\n잔액: %d원", sendAmount, playerData.getNickname(), targetPlayerData.getMoney()));
         return true;
     }
 }
