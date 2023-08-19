@@ -1,11 +1,11 @@
-package leehj050211.mceconomy.domain;
+package leehj050211.mceconomy.domain.player;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import leehj050211.mceconomy.domain.type.JobType;
-import leehj050211.mceconomy.domain.type.JobTypeConverter;
+import leehj050211.mceconomy.domain.job.type.JobType;
+import leehj050211.mceconomy.domain.job.type.JobTypeConverter;
 import leehj050211.mceconomy.exception.money.InvalidMoneyException;
 import leehj050211.mceconomy.global.exception.GeneralMCPlayerException;
 import lombok.AccessLevel;

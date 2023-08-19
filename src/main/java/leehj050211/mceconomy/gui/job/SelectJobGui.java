@@ -1,11 +1,11 @@
 package leehj050211.mceconomy.gui.job;
 
 import leehj050211.mceconomy.MCEconomy;
-import leehj050211.mceconomy.constant.JobConstant;
+import leehj050211.mceconomy.constant.MenuConstant;
 import leehj050211.mceconomy.constant.MenuId;
 import leehj050211.mceconomy.dao.PlayerDao;
-import leehj050211.mceconomy.domain.PlayerData;
-import leehj050211.mceconomy.domain.type.JobType;
+import leehj050211.mceconomy.domain.player.PlayerData;
+import leehj050211.mceconomy.domain.job.type.JobType;
 import leehj050211.mceconomy.event.job.OpenJobListEvent;
 import leehj050211.mceconomy.global.player.PlayerManager;
 import leehj050211.mceconomy.gui.CustomGui;
@@ -34,26 +34,24 @@ public class SelectJobGui extends CustomGui {
 
     @EventHandler
     public void onOpenJobList(OpenJobListEvent event) {
-        openPage(event.player, 1);
+        openPage(event.player, null, 1);
     }
 
     @Override
-    protected void openPage(Player player, int currentPage) {
-
+    protected void openPage(Player player, String subId, int currentPage) {
         ItemMenu[] itemMenus = new ItemMenu[JobType.values().length];
         for (int i=0; i<JobType.values().length; i++) {
-            itemMenus[i] = new ItemMenu(i, getJobIcon(i));
+            itemMenus[i] = new ItemMenu(i, getJobIcon(JobType.values()[i]));
         }
 
-        openMenu(player, pageSize, currentPage, "직업 선택", itemMenus);
+        openMenu(player, pageSize, currentPage, subId, "직업 선택", itemMenus);
     }
 
-    private static ItemStack getJobIcon(int index) {
-        JobType jobType = JobType.values()[index];
+    private static ItemStack getJobIcon(JobType jobType) {
         ItemStack icon = new ItemStack(jobType.getIcon(), 1);
         ItemMeta meta = icon.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), JobConstant.SELECT_JOB_KEY);
+        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_JOB_KEY);
 
         meta.setDisplayName(jobType.getName());
         icon.setLore(List.of(jobType.getDescription()));
@@ -65,7 +63,7 @@ public class SelectJobGui extends CustomGui {
     @Override
     protected void onClick(InventoryClickEvent event, Player player, ItemStack item) {
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), JobConstant.SELECT_JOB_KEY);
+        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_JOB_KEY);
 
         JobType jobType = JobType.valueOf(data.get(key, PersistentDataType.STRING));
         PlayerData playerData = playerManager.getData(player.getUniqueId());

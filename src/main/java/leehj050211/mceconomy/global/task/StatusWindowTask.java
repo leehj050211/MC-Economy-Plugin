@@ -1,7 +1,7 @@
 package leehj050211.mceconomy.global.task;
 
 import leehj050211.mceconomy.MCEconomy;
-import leehj050211.mceconomy.domain.PlayerData;
+import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.global.player.PlayerManager;
 import leehj050211.mceconomy.global.util.StringFormatter;
 import lombok.AccessLevel;

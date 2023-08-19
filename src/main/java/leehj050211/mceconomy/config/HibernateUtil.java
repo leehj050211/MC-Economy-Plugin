@@ -1,6 +1,6 @@
 package leehj050211.mceconomy.config;
 
-import leehj050211.mceconomy.domain.PlayerData;
+import leehj050211.mceconomy.domain.player.PlayerData;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

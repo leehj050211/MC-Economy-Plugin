@@ -1,8 +1,7 @@
 package leehj050211.mceconomy.global.player;
 
 import leehj050211.mceconomy.dao.PlayerDao;
-import leehj050211.mceconomy.domain.PlayerData;
-import leehj050211.mceconomy.gui.PlayerMenuData;
+import leehj050211.mceconomy.domain.player.PlayerData;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.entity.Player;

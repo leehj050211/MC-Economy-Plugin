@@ -2,7 +2,7 @@ package leehj050211.mceconomy.command.money;
 
 import leehj050211.mceconomy.command.CustomCommandExecutor;
 import leehj050211.mceconomy.constant.ErrorMsgConstant;
-import leehj050211.mceconomy.domain.PlayerData;
+import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.exception.money.InvalidSendMoneyTargetException;
 import leehj050211.mceconomy.global.exception.OfflineTargetPlayerException;
 import leehj050211.mceconomy.global.player.PlayerManager;
@@ -26,7 +26,7 @@ public class SendMoneyCommand extends CustomCommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(ErrorMsgConstant.InvalidCommandExecutor);
             return true;
         }
@@ -35,7 +35,6 @@ public class SendMoneyCommand extends CustomCommandExecutor {
         }
         Long sendAmount = Long.valueOf(args[1]);
         String targetNickname = args[0];
-        Player player = ((Player) sender).getPlayer();
         if (Objects.equals(player.getName(), targetNickname)) {
             throw new InvalidSendMoneyTargetException(player.getUniqueId());
         }

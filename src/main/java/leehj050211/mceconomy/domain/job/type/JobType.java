@@ -1,4 +1,4 @@
-package leehj050211.mceconomy.domain.type;
+package leehj050211.mceconomy.domain.job.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

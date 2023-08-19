@@ -25,9 +25,9 @@ public abstract class CustomGui implements Listener {
     }
 
     protected void openMenu(Player player, int pageSize, int currentPage,
-                            String name, ItemMenu[] itemMenus) {
+                            String subId, String name, ItemMenu[] itemMenus) {
         String title = String.format("%s (%d/%d)", name, currentPage, pageSize);
-        CustomInventoryHolder holder = new CustomInventoryHolder(menuId, currentPage);
+        CustomInventoryHolder holder = new CustomInventoryHolder(menuId, subId, currentPage);
         Inventory inventory = Bukkit.createInventory(holder, Math.max(27, itemMenus.length), title);
 
         ItemStack prevPageItem = new ItemStack(Material.ARROW);
@@ -52,7 +52,9 @@ public abstract class CustomGui implements Listener {
         if (!inventoryCheck(holder)) {
             return;
         }
-        int currentPage = getCurrentPage(holder);
+        CustomInventoryHolder customHolder = (CustomInventoryHolder) holder;
+        int currentPage = customHolder.currentPage();
+        String subId = customHolder.subId();
         event.setCancelled(true);
         ItemStack item = event.getCurrentItem();
         if (item == null || item.getType() == Material.AIR) return;
@@ -60,10 +62,10 @@ public abstract class CustomGui implements Listener {
         String itemName = item.getType().name();
         if (itemName.equals(Material.ARROW.name())) {
             if (event.getSlot() == 18) {
-                openPage(player, currentPage - 1);
+                openPage(player, subId, currentPage - 1);
                 return;
             } else if (event.getSlot() == 26) {
-                openPage(player, currentPage + 1);
+                openPage(player, subId, currentPage + 1);
                 return;
             }
         }
@@ -86,14 +88,7 @@ public abstract class CustomGui implements Listener {
                 && customHolder.menuId() == this.menuId;
     }
 
-    private int getCurrentPage(InventoryHolder holder) {
-        if (holder instanceof CustomInventoryHolder customHolder) {
-            return customHolder.currentPage();
-        }
-        return 0;
-    }
-
-    protected abstract void openPage(Player player, int currentPage);
+    protected abstract void openPage(Player player, String subId, int currentPage);
 
     protected abstract void onClick(InventoryClickEvent event, Player player, ItemStack item);
 

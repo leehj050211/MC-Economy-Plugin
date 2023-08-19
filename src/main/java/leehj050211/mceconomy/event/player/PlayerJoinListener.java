@@ -1,7 +1,7 @@
 package leehj050211.mceconomy.event.player;
 
-import leehj050211.mceconomy.domain.PlayerData;
-import leehj050211.mceconomy.domain.type.JobType;
+import leehj050211.mceconomy.domain.player.PlayerData;
+import leehj050211.mceconomy.domain.job.type.JobType;
 import leehj050211.mceconomy.event.job.OpenJobListEvent;
 import leehj050211.mceconomy.global.player.PlayerManager;
 import org.bukkit.Bukkit;

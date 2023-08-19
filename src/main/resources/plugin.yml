@@ -6,3 +6,6 @@ commands:
   송금:
     description: 상대방에게 돈을 보낼 수 있습니다.
     usage: /송금 <상대방 닉네임> <금액>
+  상점:
+    description: 상점에서 여러 상품을 살 수 있습니다.
+    usage: /상점

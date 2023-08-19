@@ -1,7 +1,7 @@
 package leehj050211.mceconomy.dao;
 
 import leehj050211.mceconomy.config.HibernateUtil;
-import leehj050211.mceconomy.domain.PlayerData;
+import leehj050211.mceconomy.domain.player.PlayerData;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.hibernate.Session;
