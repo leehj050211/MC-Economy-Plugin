@@ -1,7 +1,7 @@
 package leehj050211.mceconomy.gui.job;
 
 import leehj050211.mceconomy.MCEconomy;
-import leehj050211.mceconomy.contant.JobConstant;
+import leehj050211.mceconomy.constant.JobConstant;
 import leehj050211.mceconomy.domain.type.JobType;
 import lombok.Getter;
 import org.bukkit.Bukkit;

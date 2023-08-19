@@ -1,4 +1,4 @@
-package leehj050211.mceconomy.contant;
+package leehj050211.mceconomy.constant;
 
 public class JobConstant {
 

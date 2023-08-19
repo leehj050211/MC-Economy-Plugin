@@ -1,24 +1,27 @@
 package leehj050211.mceconomy.command.money;
 
-import leehj050211.mceconomy.contant.ErrorMsgConstant;
+import leehj050211.mceconomy.command.CustomCommandExecutor;
+import leehj050211.mceconomy.constant.ErrorMsgConstant;
 import leehj050211.mceconomy.domain.PlayerData;
 import leehj050211.mceconomy.exception.money.InvalidSendMoneyTargetException;
 import leehj050211.mceconomy.global.exception.OfflineTargetPlayerException;
 import leehj050211.mceconomy.global.player.PlayerManager;
-import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
-public class SendMoneyCommand implements CommandExecutor {
+public class SendMoneyCommand extends CustomCommandExecutor {
 
     private final PlayerManager playerManager = PlayerManager.getInstance();
 
-    @SneakyThrows
+    @Override
+    public String getName() {
+        return "송금";
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {

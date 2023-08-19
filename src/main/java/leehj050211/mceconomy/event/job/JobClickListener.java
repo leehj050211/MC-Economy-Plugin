@@ -1,7 +1,7 @@
 package leehj050211.mceconomy.event.job;
 
 import leehj050211.mceconomy.MCEconomy;
-import leehj050211.mceconomy.contant.JobConstant;
+import leehj050211.mceconomy.constant.JobConstant;
 import leehj050211.mceconomy.dao.PlayerDao;
 import leehj050211.mceconomy.domain.PlayerData;
 import leehj050211.mceconomy.domain.type.JobType;

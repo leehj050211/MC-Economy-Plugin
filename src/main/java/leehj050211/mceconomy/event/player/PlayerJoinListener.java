@@ -20,6 +20,7 @@ public class PlayerJoinListener implements Listener {
         playerManager.addPlayer(player);
         PlayerData playerData = playerManager.getData(player.getUniqueId());
 
+        System.out.println(playerData.getJob());
         if (playerData.getJob() == JobType.JOBLESS) {
             Bukkit.getPluginManager().callEvent(new OpenJobListEvent(player));
         }
