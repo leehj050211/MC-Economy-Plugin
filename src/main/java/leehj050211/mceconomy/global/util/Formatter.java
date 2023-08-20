@@ -8,9 +8,14 @@ import java.text.DecimalFormat;
 public class Formatter {
 
     private final DecimalFormat currencyFormat = new DecimalFormat("#,##0원");
+    private final DecimalFormat amountFormat = new DecimalFormat("#,##0개");
 
     public String formatMoney(long money) {
         return currencyFormat.format(money);
+    }
+
+    public String formatAmount(long amount) {
+        return amountFormat.format(amount);
     }
 
     public String formatInGameTime(long time) {

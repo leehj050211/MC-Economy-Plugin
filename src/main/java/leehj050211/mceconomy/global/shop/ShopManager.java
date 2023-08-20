@@ -30,6 +30,7 @@ public class ShopManager {
     }
 
     private static final HashMap<ShopItemData, ShopPriceCategory> priceCategory = new HashMap<>();
+    private static final HashMap<ShopItemCategory, ShopPriceCategory> itemCategoryPrice = new HashMap<>();
     private static final HashMap<Material, ShopItemData> itemDataList = new HashMap<>();
     private static final HashMap<ShopItemCategory, List<ShopItemData>> itemCategoryList = new HashMap<>();
 
@@ -47,6 +48,7 @@ public class ShopManager {
             }
             shopItemList.add(data);
             itemCategoryList.put(data.getItemCategory(), shopItemList);
+            itemCategoryPrice.put(data.getItemCategory(), data.getPriceCategory());
         });
     }
 
@@ -66,6 +68,10 @@ public class ShopManager {
             shopItemList = new ArrayList<>();
         }
         return shopItemList;
+    }
+
+    public ShopPriceCategory getPriceCategory(ShopItemCategory category) {
+        return itemCategoryPrice.get(category);
     }
 
     public void buyItem(Player player, Material material) {

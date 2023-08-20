@@ -25,16 +25,27 @@ public class ShopPriceCategory {
     private Long basePrice;
 
     @Column(nullable = false)
+    private Long amount;
+
+    @Column(nullable = false)
     private Long supply;
+
+    @Column(nullable = false)
+    private Long lastSupply;
 
     @Column(nullable = false)
     private Long demand;
 
+    @Column(nullable = false)
+    private Long lastDemand;
+
     public void increaseSupply() {
         this.supply++;
+        this.amount++;
     }
 
     public void increaseDemand() {
         this.demand++;
+        this.amount--;
     }
 }

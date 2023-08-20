@@ -8,6 +8,7 @@ import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.domain.job.type.JobType;
 import leehj050211.mceconomy.event.job.OpenJobListEvent;
 import leehj050211.mceconomy.global.player.PlayerManager;
+import leehj050211.mceconomy.global.util.ItemUtil;
 import leehj050211.mceconomy.gui.CustomGui;
 import leehj050211.mceconomy.gui.ItemMenu;
 import org.bukkit.NamespacedKey;
@@ -50,12 +51,10 @@ public class SelectJobGui extends CustomGui {
     private static ItemStack getJobIcon(JobType jobType) {
         ItemStack icon = new ItemStack(jobType.getIcon(), 1);
         ItemMeta meta = icon.getItemMeta();
-        PersistentDataContainer data = meta.getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_JOB_KEY);
 
+        ItemUtil.setItemData(meta, MenuConstant.SELECT_JOB_KEY, PersistentDataType.STRING, jobType.name());
         meta.setDisplayName(jobType.getName());
         meta.setLore(List.of(jobType.getDescription()));
-        data.set(key, PersistentDataType.STRING, jobType.name());
         icon.setItemMeta(meta);
         return icon;
     }
