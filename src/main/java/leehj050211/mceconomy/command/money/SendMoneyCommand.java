@@ -6,7 +6,8 @@ import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.exception.money.InvalidSendMoneyTargetException;
 import leehj050211.mceconomy.global.exception.OfflineTargetPlayerException;
 import leehj050211.mceconomy.global.player.PlayerManager;
-import leehj050211.mceconomy.global.util.StringFormatter;
+import leehj050211.mceconomy.global.util.MessageUtil;
+import leehj050211.mceconomy.global.util.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -47,20 +48,18 @@ public class SendMoneyCommand extends CustomCommandExecutor {
         PlayerData targetPlayerData = playerManager.getData(targetNickname);
         playerData.decreaseMoney(sendAmount);
         targetPlayerData.increaseMoney(sendAmount);
-        player.sendMessage(String.format("%s%s 송금됨 %s나 -> %s\n%s잔액: %s",
+        player.sendMessage(String.format("%s%s 송금됨 %s나 -> %s\n%s",
                 ChatColor.GOLD,
-                StringFormatter.getMoneyString(sendAmount),
+                Formatter.formatMoney(sendAmount),
                 ChatColor.GRAY,
                 targetNickname,
+                MessageUtil.getRemainingMoney(playerData)));
+        target.sendMessage(String.format("%s%s 입금됨 %s%s -> 나\n%s",
                 ChatColor.GOLD,
-                StringFormatter.getMoneyString(playerData.getMoney())));
-        target.sendMessage(String.format("%s%s 입금됨 %s%s -> 나\n%s잔액: %s",
-                ChatColor.GOLD,
-                StringFormatter.getMoneyString(sendAmount),
+                Formatter.formatMoney(sendAmount),
                 ChatColor.GRAY,
                 playerData.getNickname(),
-                ChatColor.GOLD,
-                StringFormatter.getMoneyString(targetPlayerData.getMoney())));
+                MessageUtil.getRemainingMoney(targetPlayerData)));
         return true;
     }
 }

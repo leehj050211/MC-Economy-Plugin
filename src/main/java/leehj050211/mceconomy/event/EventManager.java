@@ -7,6 +7,7 @@ import leehj050211.mceconomy.event.player.PlayerQuitListener;
 import leehj050211.mceconomy.gui.job.SelectJobGui;
 import leehj050211.mceconomy.gui.shop.ShopCategoryGui;
 import leehj050211.mceconomy.gui.shop.ShopItemCategoryGui;
+import leehj050211.mceconomy.gui.shop.ShopItemGui;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -25,7 +26,8 @@ public class EventManager {
                 new PlayerKickListener(),
                 new SelectJobGui(),
                 new ShopCategoryGui(),
-                new ShopItemCategoryGui()
+                new ShopItemCategoryGui(),
+                new ShopItemGui()
         };
 
         for (Listener listener : listeners) {

@@ -5,11 +5,11 @@ import lombok.experimental.UtilityClass;
 import java.text.DecimalFormat;
 
 @UtilityClass
-public class StringFormatter {
+public class Formatter {
 
     private final DecimalFormat currencyFormat = new DecimalFormat("#,##0원");
 
-    public String getMoneyString(long money) {
+    public String formatMoney(long money) {
         return currencyFormat.format(money);
     }
 

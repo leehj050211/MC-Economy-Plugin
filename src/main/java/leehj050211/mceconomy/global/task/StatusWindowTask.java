@@ -3,7 +3,7 @@ package leehj050211.mceconomy.global.task;
 import leehj050211.mceconomy.MCEconomy;
 import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.global.player.PlayerManager;
-import leehj050211.mceconomy.global.util.StringFormatter;
+import leehj050211.mceconomy.global.util.Formatter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
@@ -74,10 +74,10 @@ public class StatusWindowTask {
 
         objective.setDisplayName(ChatColor.BOLD + player.getName() + "의 상태창");
         objective.getScore(ChatColor.YELLOW + "시간:").setScore(5);
-        objective.getScore(StringFormatter.formatInGameTime(time)).setScore(4);
+        objective.getScore(Formatter.formatInGameTime(time)).setScore(4);
         objective.getScore(ChatColor.YELLOW + "직업:").setScore(3);
         objective.getScore(playerData.getJob().getName()).setScore(2);
         objective.getScore(ChatColor.YELLOW + "돈:").setScore(1);
-        objective.getScore(StringFormatter.getMoneyString(money)).setScore(0);
+        objective.getScore(Formatter.formatMoney(money)).setScore(0);
     }
 }

@@ -54,14 +54,15 @@ public class SelectJobGui extends CustomGui {
         NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_JOB_KEY);
 
         meta.setDisplayName(jobType.getName());
-        icon.setLore(List.of(jobType.getDescription()));
+        meta.setLore(List.of(jobType.getDescription()));
         data.set(key, PersistentDataType.STRING, jobType.name());
         icon.setItemMeta(meta);
         return icon;
     }
 
     @Override
-    protected void onClick(InventoryClickEvent event, Player player, ItemStack item) {
+    protected void onClick(InventoryClickEvent event, Player player,
+                           ItemStack item, String subId, int currentPage) {
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_JOB_KEY);
 

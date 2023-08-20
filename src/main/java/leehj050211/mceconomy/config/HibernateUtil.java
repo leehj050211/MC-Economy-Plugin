@@ -1,6 +1,8 @@
 package leehj050211.mceconomy.config;
 
 import leehj050211.mceconomy.domain.player.PlayerData;
+import leehj050211.mceconomy.domain.shop.ShopPriceCategory;
+import leehj050211.mceconomy.domain.shop.ShopItemData;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +28,9 @@ public class HibernateUtil {
                 .setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect")
                 .setProperty("hibernate.show_sql", "true")
                 .setProperty("hibernate.hbm2ddl.auto", "update")
-                .addAnnotatedClass(PlayerData.class);
+                .addAnnotatedClass(PlayerData.class)
+                .addAnnotatedClass(ShopPriceCategory.class)
+                .addAnnotatedClass(ShopItemData.class);
 
         sessionFactory = configuration.buildSessionFactory();;
     }

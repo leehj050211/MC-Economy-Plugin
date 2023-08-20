@@ -7,6 +7,7 @@ import leehj050211.mceconomy.domain.shop.type.ShopCategory;
 import leehj050211.mceconomy.domain.shop.type.ShopItemCategory;
 import leehj050211.mceconomy.event.shop.OpenShopPurchaseEvent;
 import leehj050211.mceconomy.event.shop.SelectShopCategoryEvent;
+import leehj050211.mceconomy.event.shop.SelectShopItemCategoryEvent;
 import leehj050211.mceconomy.gui.CustomGui;
 import leehj050211.mceconomy.gui.ItemMenu;
 import org.bukkit.Bukkit;
@@ -50,7 +51,7 @@ public class ShopItemCategoryGui extends CustomGui {
         ItemStack icon = new ItemStack(category.getIcon(), 1);
         ItemMeta meta = icon.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_SHOP_CATEGORY_KEY);
+        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_SHOP_ITEM_CATEGORY_KEY);
 
         meta.setDisplayName(category.getName());
         data.set(key, PersistentDataType.STRING, category.name());
@@ -59,11 +60,12 @@ public class ShopItemCategoryGui extends CustomGui {
     }
 
     @Override
-    protected void onClick(InventoryClickEvent event, Player player, ItemStack item) {
+    protected void onClick(InventoryClickEvent event, Player player,
+                           ItemStack item, String subId, int currentPage) {
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_SHOP_ITEM_CATEGORY_KEY);
 
-        ShopItemCategory category = ShopItemCategory.valueOf(data.get(key, PersistentDataType.STRING));
-        //TODO 아이템 목록 메뉴 열기
+        ShopItemCategory itemCategory = ShopItemCategory.valueOf(data.get(key, PersistentDataType.STRING));
+        Bukkit.getPluginManager().callEvent(new SelectShopItemCategoryEvent(player, itemCategory));
     }
 }

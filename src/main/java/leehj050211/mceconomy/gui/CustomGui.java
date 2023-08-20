@@ -48,6 +48,9 @@ public abstract class CustomGui implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         Inventory inventory = event.getClickedInventory();
+        if (inventory == null) {
+            return;
+        }
         InventoryHolder holder = Objects.requireNonNull(inventory).getHolder();
         if (!inventoryCheck(holder)) {
             return;
@@ -70,7 +73,7 @@ public abstract class CustomGui implements Listener {
             }
         }
 
-        onClick(event, player, item);
+        onClick(event, player, item, subId, currentPage);
     }
 
     @EventHandler
@@ -90,6 +93,5 @@ public abstract class CustomGui implements Listener {
 
     protected abstract void openPage(Player player, String subId, int currentPage);
 
-    protected abstract void onClick(InventoryClickEvent event, Player player, ItemStack item);
-
+    protected abstract void onClick(InventoryClickEvent event, Player player, ItemStack item, String subId, int currentPage);
 }

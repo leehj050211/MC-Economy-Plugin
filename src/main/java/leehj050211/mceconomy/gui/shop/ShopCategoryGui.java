@@ -4,8 +4,10 @@ import leehj050211.mceconomy.MCEconomy;
 import leehj050211.mceconomy.constant.MenuConstant;
 import leehj050211.mceconomy.constant.MenuId;
 import leehj050211.mceconomy.domain.shop.type.ShopCategory;
+import leehj050211.mceconomy.domain.shop.type.ShopItemCategory;
 import leehj050211.mceconomy.event.shop.OpenShopPurchaseEvent;
 import leehj050211.mceconomy.event.shop.SelectShopCategoryEvent;
+import leehj050211.mceconomy.event.shop.SelectShopItemCategoryEvent;
 import leehj050211.mceconomy.gui.CustomGui;
 import leehj050211.mceconomy.gui.ItemMenu;
 import org.bukkit.Bukkit;
@@ -54,7 +56,8 @@ public class ShopCategoryGui extends CustomGui {
     }
 
     @Override
-    protected void onClick(InventoryClickEvent event, Player player, ItemStack item) {
+    protected void onClick(InventoryClickEvent event, Player player,
+                           ItemStack item, String subId, int currentPage) {
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_SHOP_CATEGORY_KEY);
 
@@ -62,8 +65,8 @@ public class ShopCategoryGui extends CustomGui {
         if (category.hasChildCategory()) {
             Bukkit.getPluginManager().callEvent(new SelectShopCategoryEvent(player, category));
         } else {
-            //TODO 아이템 목록 메뉴 열기
+            ShopItemCategory itemCategory = ShopItemCategory.valueOf(category.name());
+            Bukkit.getPluginManager().callEvent(new SelectShopItemCategoryEvent(player, itemCategory));
         }
     }
-
 }

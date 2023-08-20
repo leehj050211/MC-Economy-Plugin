@@ -2,7 +2,9 @@ package leehj050211.mceconomy.global.task;
 
 import leehj050211.mceconomy.MCEconomy;
 import leehj050211.mceconomy.dao.PlayerDao;
+import leehj050211.mceconomy.dao.ShopCategoryDao;
 import leehj050211.mceconomy.global.player.PlayerManager;
+import leehj050211.mceconomy.global.shop.ShopManager;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.plugin.Plugin;
@@ -21,11 +23,16 @@ public class SaveDataTask {
 
     private final Plugin plugin = MCEconomy.getInstance();
     private BukkitRunnable runnable;
+
     private final PlayerManager playerManager = PlayerManager.getInstance();
     private final PlayerDao playerDao = PlayerDao.getInstance();
 
+    private final ShopManager shopManager = ShopManager.getInstance();
+    private final ShopCategoryDao shopCategoryDao = ShopCategoryDao.getInstance();
+
     public void execute() {
         playerDao.updateAll(playerManager.getAllData());
+        shopCategoryDao.updateAll(shopManager.getAllCategory());
     }
 
     public void start() {
