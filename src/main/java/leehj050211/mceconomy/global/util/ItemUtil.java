@@ -15,4 +15,12 @@ public class ItemUtil {
         NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), keyName);
         data.set(key, type, value);
     }
+
+    public int getPage(int index, int rows) {
+        return index / (9 * rows);
+    }
+
+    public int getSlot(int index, int rows) {
+        return index % (9 * rows);
+    }
 }

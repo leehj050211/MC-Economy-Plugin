@@ -1,71 +1,57 @@
 package leehj050211.mceconomy.gui.shop;
 
-import leehj050211.mceconomy.MCEconomy;
-import leehj050211.mceconomy.constant.MenuConstant;
-import leehj050211.mceconomy.constant.MenuId;
+import com.samjakob.spigui.buttons.SGButton;
+import com.samjakob.spigui.item.ItemBuilder;
+import com.samjakob.spigui.menu.SGMenu;
 import leehj050211.mceconomy.domain.shop.type.ShopCategory;
 import leehj050211.mceconomy.domain.shop.type.ShopItemCategory;
-import leehj050211.mceconomy.event.shop.OpenShopPurchaseEvent;
 import leehj050211.mceconomy.event.shop.SelectShopCategoryEvent;
 import leehj050211.mceconomy.event.shop.SelectShopItemCategoryEvent;
-import leehj050211.mceconomy.gui.CustomGui;
-import leehj050211.mceconomy.gui.ItemMenu;
+import leehj050211.mceconomy.global.util.ItemUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
-public class ShopItemCategoryGui extends CustomGui {
+import static leehj050211.mceconomy.MCEconomy.spiGUI;
 
-    private final int pageSize = 1;
+public class ShopItemCategoryGui implements Listener {
 
-    public ShopItemCategoryGui() {
-        super(MenuId.SELECT_SHOP_ITEM_CATEGORY);
-    }
+    private static final int ROWS = 3;
 
     @EventHandler
     public void onSelectShopCategory(SelectShopCategoryEvent event) {
-        openPage(event.getPlayer(), event.getCategory().name(), 1);
+        openPage(event.getPlayer(), event.getCategory());
     }
 
-    @Override
-    protected void openPage(Player player, String subId, int currentPage) {
-        ShopCategory shopCategory = ShopCategory.valueOf(subId);
+    protected void openPage(Player player, ShopCategory shopCategory) {
+        SGMenu sgMenu = spiGUI.create("상품 카테고리 선택 ({currentPage}/{maxPage})", ROWS);
+        sgMenu.setAutomaticPaginationEnabled(true);
+
         List<ShopItemCategory> filteredCategories = ShopItemCategory.getItemCategories(shopCategory);
-        ItemMenu[] itemMenus = new ItemMenu[filteredCategories.size()];
         for (int i=0; i<filteredCategories.size(); i++) {
-            itemMenus[i] = new ItemMenu(i, getCategoryIcon(filteredCategories.get(i)));
+            sgMenu.setButton(
+                    ItemUtil.getPage(i, ROWS),
+                    ItemUtil.getSlot(i, ROWS),
+                    getItemCategoryIcon(filteredCategories.get(i)));
         }
-
-        openMenu(player, pageSize, currentPage, subId,"상품 카테고리 선택", itemMenus);
+        player.openInventory(sgMenu.getInventory());
     }
 
-    private static ItemStack getCategoryIcon(ShopItemCategory category) {
-        ItemStack icon = new ItemStack(category.getIcon(), 1);
-        ItemMeta meta = icon.getItemMeta();
-        PersistentDataContainer data = meta.getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_SHOP_ITEM_CATEGORY_KEY);
-
-        meta.setDisplayName(category.getName());
-        data.set(key, PersistentDataType.STRING, category.name());
-        icon.setItemMeta(meta);
-        return icon;
+    private static SGButton getItemCategoryIcon(ShopItemCategory itemCategory) {
+        ItemStack icon = new ItemBuilder(itemCategory.getIcon())
+                .name(itemCategory.getName())
+                .build();
+        return new SGButton(icon)
+                .withListener(event -> selectItemCategory(event, itemCategory));
     }
 
-    @Override
-    protected void onClick(InventoryClickEvent event, Player player,
-                           ItemStack item, String subId, int currentPage) {
-        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_SHOP_ITEM_CATEGORY_KEY);
-
-        ShopItemCategory itemCategory = ShopItemCategory.valueOf(data.get(key, PersistentDataType.STRING));
+    private static void selectItemCategory(InventoryClickEvent event, ShopItemCategory itemCategory) {
+        Player player = (Player) event.getWhoClicked();
         Bukkit.getPluginManager().callEvent(new SelectShopItemCategoryEvent(player, itemCategory));
     }
 }

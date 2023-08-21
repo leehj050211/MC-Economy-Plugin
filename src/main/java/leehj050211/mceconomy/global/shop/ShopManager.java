@@ -1,6 +1,5 @@
 package leehj050211.mceconomy.global.shop;
 
-import leehj050211.mceconomy.dao.ShopCategoryDao;
 import leehj050211.mceconomy.dao.ShopItemDao;
 import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.domain.shop.ShopPriceCategory;
@@ -70,8 +69,8 @@ public class ShopManager {
         return shopItemList;
     }
 
-    public ShopPriceCategory getPriceCategory(ShopItemCategory category) {
-        return itemCategoryPrice.get(category);
+    public ShopPriceCategory getPriceCategory(ShopItemCategory itemCategory) {
+        return itemCategoryPrice.get(itemCategory);
     }
 
     public void buyItem(Player player, Material material) {

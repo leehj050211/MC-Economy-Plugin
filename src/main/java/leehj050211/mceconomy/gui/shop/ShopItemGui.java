@@ -1,7 +1,9 @@
 package leehj050211.mceconomy.gui.shop;
 
-import leehj050211.mceconomy.constant.MenuConstant;
-import leehj050211.mceconomy.constant.MenuId;
+import com.samjakob.spigui.buttons.SGButton;
+import com.samjakob.spigui.item.ItemBuilder;
+import com.samjakob.spigui.menu.SGMenu;
+import leehj050211.mceconomy.MCEconomy;
 import leehj050211.mceconomy.domain.shop.ShopItemData;
 import leehj050211.mceconomy.domain.shop.ShopPriceCategory;
 import leehj050211.mceconomy.domain.shop.type.ShopItemCategory;
@@ -9,82 +11,74 @@ import leehj050211.mceconomy.event.shop.SelectShopItemCategoryEvent;
 import leehj050211.mceconomy.global.shop.ShopManager;
 import leehj050211.mceconomy.global.util.Formatter;
 import leehj050211.mceconomy.global.util.ItemUtil;
-import leehj050211.mceconomy.gui.CustomGui;
-import leehj050211.mceconomy.gui.ItemMenu;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class ShopItemGui extends CustomGui {
+import static leehj050211.mceconomy.MCEconomy.spiGUI;
 
-    private final ShopManager shopManager = ShopManager.getInstance();
-    private final int pageSize = 3;
+public class ShopItemGui implements Listener {
 
-    public ShopItemGui() {
-        super(MenuId.SELECT_SHOP_ITEM);
-    }
+    private static final ShopManager shopManager = ShopManager.getInstance();
+    private static final int ROWS = 3;
 
     @EventHandler
     public void onSelectShopCategory(SelectShopItemCategoryEvent event) {
-        openPage(event.getPlayer(), event.getCategory().name(), 1);
+        openMenu(event.getPlayer(), event.getItemCategory());
     }
 
-    @Override
-    protected void openPage(Player player, String subId, int currentPage) {
-        ShopItemCategory category = ShopItemCategory.valueOf(subId);
-        ShopPriceCategory priceCategory = shopManager.getPriceCategory(category);
-        List<ShopItemData> filteredItemList = shopManager.getItemList(category);
-        ItemMenu[] itemMenus = new ItemMenu[filteredItemList.size() + 1];
+    private void openMenu(Player player, ShopItemCategory itemCategory) {
+        SGMenu sgMenu = spiGUI.create("구매할 상품 선택 ({currentPage}/{maxPage})", ROWS);
+        sgMenu.setAutomaticPaginationEnabled(true);
+        AtomicReference<BukkitTask> refreshTask = new AtomicReference<>(new BukkitRunnable(){
+            @Override
+            public void run() {
+                refresh(player, sgMenu, itemCategory);
+            }
+        }.runTaskTimer(MCEconomy.getInstance(), 0, 20));
+        player.openInventory(sgMenu.getInventory());
+
+        sgMenu.setOnClose(menu -> {
+            if (refreshTask.get() != null) refreshTask.get().cancel();
+        });
+    }
+
+    private void refresh(Player player, SGMenu sgMenu, ShopItemCategory itemCategory) {
+        ShopPriceCategory priceCategory = shopManager.getPriceCategory(itemCategory);
+        List<ShopItemData> filteredItemList = shopManager.getItemList(itemCategory);
         for (int i=0; i<filteredItemList.size(); i++) {
-            itemMenus[i] = new ItemMenu(i, getItemIcon(filteredItemList.get(i)));
+            sgMenu.setButton(
+                    ItemUtil.getPage(i, ROWS),
+                    ItemUtil.getSlot(i, ROWS),
+                    getItem(filteredItemList.get(i), sgMenu));
         }
-        itemMenus[filteredItemList.size()] = new ItemMenu(1, getCategoryInfoIcon(priceCategory), true);
+        sgMenu.setToolbarBuilder(new ShopItemToolbarProvider(priceCategory));
 
-        openMenu(player, pageSize, currentPage, subId,"구매할 상품 선택", itemMenus);
+        sgMenu.refreshInventory(player);
     }
 
-    private static ItemStack getItemIcon(ShopItemData itemData) {
-        ItemStack icon = new ItemStack(itemData.getMaterial(), 1);
-        ItemMeta meta = icon.getItemMeta();
-        List<String> description = List.of(
-                "현재 가격: " + Formatter.formatMoney(itemData.getCurrentPrice()),
-                "정상 가격: " + Formatter.formatMoney(itemData.getPrice()));
-        meta.setLore(description);
-        icon.setItemMeta(meta);
-        return icon;
+    private SGButton getItem(ShopItemData itemData, SGMenu sgMenu) {
+        ItemStack item = new ItemBuilder(itemData.getMaterial())
+                .lore(
+                        "현재 가격: " + Formatter.formatMoney(itemData.getCurrentPrice()),
+                        "정상 가격: " + Formatter.formatMoney(itemData.getPrice()))
+                .build();
+        return new SGButton(item)
+                .withListener(event -> selectItem(event, sgMenu, itemData));
     }
 
-    private static ItemStack getCategoryInfoIcon(ShopPriceCategory category) {
-        ItemStack icon = new ItemStack(Material.EMERALD, 1);
-        ItemMeta meta = icon.getItemMeta();
 
-        ItemUtil.setItemData(meta, MenuConstant.ONLY_VIEW_ITEM_KEY, PersistentDataType.BOOLEAN, true);
-        meta.setDisplayName(String.format("%s%s상품정보", ChatColor.RESET, ChatColor.BOLD));
-        List<String> description = List.of(
-                String.format("%s남은 물량: %s", (category.getAmount() > 0 ? ChatColor.GOLD : ChatColor.DARK_RED), Formatter.formatAmount(category.getAmount())),
-                String.format("%s수요: %s", ChatColor.RED, Formatter.formatAmount(category.getDemand())),
-                String.format("%s지난 주 수요: %s", ChatColor.RED, Formatter.formatAmount(category.getLastDemand())),
-                String.format("%s공급: %s",ChatColor.GREEN, Formatter.formatAmount(category.getSupply())),
-                String.format("%s지난 주 공급: %s", ChatColor.GREEN, Formatter.formatAmount(category.getLastSupply())));
-        meta.setLore(description);
-        icon.setItemMeta(meta);
-        return icon;
-    }
-
-    @Override
-    protected void onClick(InventoryClickEvent event, Player player,
-                           ItemStack item, String subId, int currentPage) {
-        shopManager.buyItem(player, item.getType());
-        ItemStack itemStack = new ItemStack(item.getType(), item.getAmount());
-        player.getInventory().addItem(itemStack);
-
-        openPage(player, subId, currentPage);
+    private void selectItem(InventoryClickEvent event, SGMenu sgMenu, ShopItemData itemData) {
+        Player player = (Player) event.getWhoClicked();
+        shopManager.buyItem(player, itemData.getMaterial());
+        player.getInventory().addItem(new ItemStack(itemData.getMaterial()));
+        refresh(player, sgMenu, itemData.getItemCategory());
     }
 }

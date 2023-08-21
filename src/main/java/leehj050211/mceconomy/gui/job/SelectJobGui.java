@@ -1,71 +1,57 @@
 package leehj050211.mceconomy.gui.job;
 
-import leehj050211.mceconomy.MCEconomy;
-import leehj050211.mceconomy.constant.MenuConstant;
-import leehj050211.mceconomy.constant.MenuId;
+import com.samjakob.spigui.buttons.SGButton;
+import com.samjakob.spigui.item.ItemBuilder;
+import com.samjakob.spigui.menu.SGMenu;
 import leehj050211.mceconomy.dao.PlayerDao;
 import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.domain.job.type.JobType;
 import leehj050211.mceconomy.event.job.OpenJobListEvent;
 import leehj050211.mceconomy.global.player.PlayerManager;
 import leehj050211.mceconomy.global.util.ItemUtil;
-import leehj050211.mceconomy.gui.CustomGui;
-import leehj050211.mceconomy.gui.ItemMenu;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
-import java.util.List;
+import static leehj050211.mceconomy.MCEconomy.spiGUI;
 
-public class SelectJobGui extends CustomGui {
+public class SelectJobGui implements Listener {
 
-    private final PlayerManager playerManager = PlayerManager.getInstance();
-    private final PlayerDao playerDao = PlayerDao.getInstance();
-
-    private final int pageSize = 3;
-
-    public SelectJobGui() {
-        super(MenuId.SELECT_JOB);
-    }
+    private static final PlayerManager playerManager = PlayerManager.getInstance();
+    private static final PlayerDao playerDao = PlayerDao.getInstance();
+    private static final int ROWS = 1;
 
     @EventHandler
     public void onOpenJobList(OpenJobListEvent event) {
-        openPage(event.player, null, 1);
+        openMenu(event.player);
     }
 
-    @Override
-    protected void openPage(Player player, String subId, int currentPage) {
-        ItemMenu[] itemMenus = new ItemMenu[JobType.values().length];
+    private void openMenu(Player player) {
+        SGMenu sgMenu = spiGUI.create("직업 선택 test (Page {currentPage}/{maxPage})", ROWS);
+        sgMenu.setAutomaticPaginationEnabled(true);
+
         for (int i=0; i<JobType.values().length; i++) {
-            itemMenus[i] = new ItemMenu(i, getJobIcon(JobType.values()[i]));
+            sgMenu.setButton(
+                    ItemUtil.getPage(i, ROWS),
+                    ItemUtil.getSlot(i, ROWS),
+                    getJobIcon(JobType.values()[i]));
         }
-
-        openMenu(player, pageSize, currentPage, subId, "직업 선택", itemMenus);
+        player.openInventory(sgMenu.getInventory());
     }
 
-    private static ItemStack getJobIcon(JobType jobType) {
-        ItemStack icon = new ItemStack(jobType.getIcon(), 1);
-        ItemMeta meta = icon.getItemMeta();
-
-        ItemUtil.setItemData(meta, MenuConstant.SELECT_JOB_KEY, PersistentDataType.STRING, jobType.name());
-        meta.setDisplayName(jobType.getName());
-        meta.setLore(List.of(jobType.getDescription()));
-        icon.setItemMeta(meta);
-        return icon;
+    private static SGButton getJobIcon(JobType jobType) {
+        ItemStack icon = new ItemBuilder(jobType.getIcon())
+                .name(jobType.getName())
+                .lore(jobType.getDescription())
+                .build();
+        return new SGButton(icon)
+                .withListener(event -> selectJob(event, jobType));
     }
 
-    @Override
-    protected void onClick(InventoryClickEvent event, Player player,
-                           ItemStack item, String subId, int currentPage) {
-        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_JOB_KEY);
-
-        JobType jobType = JobType.valueOf(data.get(key, PersistentDataType.STRING));
+    private static void selectJob(InventoryClickEvent event, JobType jobType) {
+        Player player = (Player) event.getWhoClicked();
         PlayerData playerData = playerManager.getData(player.getUniqueId());
         playerData.updateJob(jobType);
         playerDao.update(playerData);
@@ -73,5 +59,4 @@ public class SelectJobGui extends CustomGui {
         player.sendMessage(jobType.getName() + " 선택됨");
         player.closeInventory();
     }
-
 }
