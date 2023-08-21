@@ -73,13 +73,13 @@ public class ShopManager {
         return itemCategoryPrice.get(itemCategory);
     }
 
-    public void buyItem(Player player, Material material) {
+    public void buyItem(Player player, Material material, int amount) {
         ShopItemData itemData = itemDataList.get(material);
         ShopPriceCategory priceCategory = itemData.getPriceCategory();
         PlayerData playerData = playerManager.getData(player.getUniqueId());
 
-        playerData.decreaseMoney(itemData.getCurrentPrice());
+        playerData.decreaseMoney(itemData.getCurrentPrice(amount));
         player.sendMessage(MessageUtil.getRemainingMoney(playerData));
-        priceCategory.increaseDemand();
+        priceCategory.increaseDemand(amount);
     }
 }

@@ -39,13 +39,13 @@ public class ShopPriceCategory {
     @Column(nullable = false)
     private Long lastDemand;
 
-    public void increaseSupply() {
-        this.supply++;
-        this.amount++;
+    public void increaseSupply(int amount) {
+        this.supply += amount;
+        this.amount += amount;
     }
 
-    public void increaseDemand() {
-        this.demand++;
-        this.amount--;
+    public void increaseDemand(int amount) {
+        this.demand += amount;
+        this.amount -= amount;
     }
 }

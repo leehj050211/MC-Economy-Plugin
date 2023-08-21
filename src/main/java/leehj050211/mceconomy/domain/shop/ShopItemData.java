@@ -41,8 +41,12 @@ public class ShopItemData {
         return this.price + this.priceCategory.getBasePrice();
     }
 
-    public long getCurrentPrice() {
-        long demand = this.priceCategory.getDemand();
+    public long getPrice(int amount) {
+        return getPrice() * amount;
+    }
+
+    public long getCurrentPrice(int amount) {
+        long demand = this.priceCategory.getDemand() + amount - 1;
         long supply = this.priceCategory.getSupply();
         double demandFactor = Math.pow(1.2, demand);
         double supplyFactor = 1 - (supply * 0.05);

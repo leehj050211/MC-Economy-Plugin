@@ -20,7 +20,7 @@ import static leehj050211.mceconomy.MCEconomy.spiGUI;
 public class ShopCategoryGui {
 
     private static final int ROWS = 3;
-    private final SGMenu sgMenu = spiGUI.create("상품 카테고리 선택 ({currentPage}/{maxPage})", ROWS);
+    private final SGMenu sgMenu = spiGUI.create("상점 ({currentPage}/{maxPage})", ROWS);
 
     private final Player player;
 
