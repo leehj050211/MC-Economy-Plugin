@@ -7,4 +7,5 @@ public class NotEnoughMoneyException extends GeneralMCPlayerException {
     public NotEnoughMoneyException(UUID uuid, Long lackMoney) {
         super(uuid, "돈이 " + lackMoney  + "원 부족합니다.");
     }
+
 }

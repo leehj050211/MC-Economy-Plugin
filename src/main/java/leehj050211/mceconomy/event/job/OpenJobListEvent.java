@@ -22,4 +22,5 @@ public class OpenJobListEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
+
 }

@@ -8,11 +8,13 @@ import leehj050211.mceconomy.dao.PlayerDao;
 import leehj050211.mceconomy.domain.gacha.type.GachaType;
 import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.event.gacha.OpenGachaEvent;
-import leehj050211.mceconomy.exception.money.NotEnoughMoneyException;
 import leehj050211.mceconomy.global.player.PlayerManager;
 import leehj050211.mceconomy.global.util.ItemUtil;
 import leehj050211.mceconomy.gui.CustomGui;
 import leehj050211.mceconomy.gui.ItemMenu;
+import leehj050211.mceconomy.util.CountDownTimer;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,7 +44,7 @@ public class GachaGui extends CustomGui {
     @Override
     protected void openPage(Player player, String subId, int currentPage) {
         ItemMenu[] itemMenus = new ItemMenu[GachaType.values().length];
-        for (int i=0; i<GachaType.values().length; i++) {
+        for (int i = 0; i < GachaType.values().length; i++) {
             itemMenus[i] = new ItemMenu(i, getGachaIcon(GachaType.values()[i]));
         }
 
@@ -53,7 +55,8 @@ public class GachaGui extends CustomGui {
         ItemStack icon = new ItemStack(gachaType.getIcon(), 1);
         ItemMeta meta = icon.getItemMeta();
 
-        ItemUtil.setItemData(meta, MenuConstant.SELECT_JOB_KEY, PersistentDataType.STRING, gachaType.name());
+        ItemUtil.setItemData(meta, MenuConstant.SELECT_JOB_KEY, PersistentDataType.STRING,
+            gachaType.name());
         meta.setDisplayName(gachaType.getName());
         meta.setLore(List.of(gachaType.getDescription()));
         icon.setItemMeta(meta);
@@ -71,19 +74,25 @@ public class GachaGui extends CustomGui {
         PlayerData playerData = playerManager.getData(player.getUniqueId());
         if (gachaType == GachaType.NORMAL_GACHA) {
             if (playerData.getMoney() < 100L) {
-                throw new NotEnoughMoneyException(player.getUniqueId(), 100L - playerData.getMoney());
+                player.closeInventory();
+                Long lackMoney = 100L - playerData.getMoney();
+                player.sendMessage(ChatColor.DARK_RED + "에러: " + "돈이 " + lackMoney + "원 부족합니다.");
             }
             playerData.decreaseMoney(100L);
         }
         if (gachaType == GachaType.EMERALD_GACHA) {
             if (playerData.getMoney() < 1000L) {
-                throw new NotEnoughMoneyException(player.getUniqueId(), 1000L - playerData.getMoney());
+                player.closeInventory();
+                Long lackMoney = 1000L - playerData.getMoney();
+                player.sendMessage(ChatColor.DARK_RED + "에러: " + "돈이 " + lackMoney + "원 부족합니다.");
             }
             playerData.decreaseMoney(1000L);
         }
         if (gachaType == GachaType.DIAMOND_GACHA) {
             if (playerData.getMoney() < 10000L) {
-                throw new NotEnoughMoneyException(player.getUniqueId(), 10000L - playerData.getMoney());
+                player.closeInventory();
+                Long lackMoney = 10000L - playerData.getMoney();
+                player.sendMessage(ChatColor.DARK_RED + "에러: " + "돈이 " + lackMoney + "원 부족합니다.");
             }
             playerData.decreaseMoney(10000L);
         }
@@ -91,6 +100,19 @@ public class GachaGui extends CustomGui {
         playerDao.update(playerData);
         player.sendMessage(gachaType.getName() + "가 시작됩니다.");
         player.closeInventory();
+
+        CountDownTimer timer = new CountDownTimer(MCEconomy.getInstance(),
+            3,
+            () -> Bukkit.broadcastMessage(
+                ChatColor.YELLOW + playerData.getNickname() + "님이 " + gachaType.getName()
+                    + "를 시작했습니다!"),
+            () -> {
+                Bukkit.broadcastMessage(ChatColor.YELLOW + "와! 샌즈!");
+            },
+            (t) -> Bukkit.broadcastMessage(ChatColor.YELLOW + "가챠 뽑는중 " + (t.getSecondsLeft()))
+        );
+
+        timer.scheduleTimer();
     }
 
 }
