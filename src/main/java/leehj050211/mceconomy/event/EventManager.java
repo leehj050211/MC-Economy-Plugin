@@ -4,6 +4,7 @@ import leehj050211.mceconomy.MCEconomy;
 import leehj050211.mceconomy.event.player.PlayerJoinListener;
 import leehj050211.mceconomy.event.player.PlayerKickListener;
 import leehj050211.mceconomy.event.player.PlayerQuitListener;
+import leehj050211.mceconomy.gui.gacha.GachaGui;
 import leehj050211.mceconomy.gui.job.SelectJobGui;
 import leehj050211.mceconomy.gui.shop.ShopCategoryGui;
 import leehj050211.mceconomy.gui.shop.ShopItemCategoryGui;
@@ -24,6 +25,7 @@ public class EventManager {
                 new PlayerJoinListener(),
                 new PlayerQuitListener(),
                 new PlayerKickListener(),
+                new GachaGui(),
                 new SelectJobGui(),
                 new ShopCategoryGui(),
                 new ShopItemCategoryGui(),

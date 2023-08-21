@@ -3,7 +3,6 @@ package leehj050211.mceconomy.command.gacha;
 import leehj050211.mceconomy.command.CustomCommandExecutor;
 import leehj050211.mceconomy.constant.ErrorMsgConstant;
 import leehj050211.mceconomy.event.gacha.OpenGachaEvent;
-import leehj050211.mceconomy.global.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

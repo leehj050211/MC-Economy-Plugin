@@ -16,9 +16,9 @@ public class HibernateUtil {
     private static final SessionFactory sessionFactory;
 
     static {
-        String url = "jdbc:mysql://localhost:3306/minecraft_economy?autoReconnect=true";
-        String user = "mine";
-        String password = "mine";
+        String url = "jdbc:mysql://localhost:4306/minecraft_economy?autoReconnect=true";
+        String user = "root";
+        String password = "root";
 
         Configuration configuration = new Configuration()
                 .setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver")
@@ -32,6 +32,6 @@ public class HibernateUtil {
                 .addAnnotatedClass(ShopPriceCategory.class)
                 .addAnnotatedClass(ShopItemData.class);
 
-        sessionFactory = configuration.buildSessionFactory();;
+        sessionFactory = configuration.buildSessionFactory();
     }
 }

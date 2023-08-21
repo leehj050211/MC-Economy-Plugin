@@ -60,4 +60,5 @@ public class PlayerData {
             throw new InvalidMoneyException(this.uuid);
         }
     }
+
 }

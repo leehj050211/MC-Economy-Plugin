@@ -24,4 +24,5 @@ public class OpenShopCommand extends CustomCommandExecutor {
         Bukkit.getPluginManager().callEvent(new OpenShopPurchaseEvent(player));
         return true;
     }
+
 }
