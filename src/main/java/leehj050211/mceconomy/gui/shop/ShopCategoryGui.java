@@ -5,30 +5,26 @@ import com.samjakob.spigui.item.ItemBuilder;
 import com.samjakob.spigui.menu.SGMenu;
 import leehj050211.mceconomy.domain.shop.type.ShopCategory;
 import leehj050211.mceconomy.domain.shop.type.ShopItemCategory;
-import leehj050211.mceconomy.event.shop.OpenShopPurchaseEvent;
 import leehj050211.mceconomy.event.shop.SelectShopCategoryEvent;
 import leehj050211.mceconomy.event.shop.SelectShopItemCategoryEvent;
 import leehj050211.mceconomy.global.util.ItemUtil;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;;
 
 import static leehj050211.mceconomy.MCEconomy.spiGUI;
 
-public class ShopCategoryGui implements Listener {
+@RequiredArgsConstructor
+public class ShopCategoryGui {
 
     private static final int ROWS = 3;
+    private final SGMenu sgMenu = spiGUI.create("상품 카테고리 선택 ({currentPage}/{maxPage})", ROWS);
 
-    @EventHandler
-    public void onOpenShop(OpenShopPurchaseEvent event) {
-        openMenu(event.player);
-    }
+    private final Player player;
 
-    private void openMenu(Player player) {
-        SGMenu sgMenu = spiGUI.create("상품 카테고리 선택 ({currentPage}/{maxPage})", ROWS);
+    public Inventory getInventory() {
         sgMenu.setAutomaticPaginationEnabled(true);
 
         for (int i=0; i<ShopCategory.values().length; i++) {
@@ -37,19 +33,18 @@ public class ShopCategoryGui implements Listener {
                     ItemUtil.getSlot(i, ROWS),
                     getCategoryIcon(ShopCategory.values()[i]));
         }
-        player.openInventory(sgMenu.getInventory());
+        return sgMenu.getInventory();
     }
 
-    private static SGButton getCategoryIcon(ShopCategory category) {
+    private SGButton getCategoryIcon(ShopCategory category) {
         ItemStack icon = new ItemBuilder(category.getIcon())
                 .name(category.getName())
                 .build();
         return new SGButton(icon)
-                .withListener(event -> selectCategory(event, category));
+                .withListener(event -> selectCategory(category));
     }
 
-    private static void selectCategory(InventoryClickEvent event, ShopCategory category) {
-        Player player = (Player) event.getWhoClicked();
+    private void selectCategory(ShopCategory category) {
         if (category.hasChildCategory()) {
             Bukkit.getPluginManager().callEvent(new SelectShopCategoryEvent(player, category));
         } else {

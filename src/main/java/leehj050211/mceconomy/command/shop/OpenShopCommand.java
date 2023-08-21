@@ -2,7 +2,7 @@ package leehj050211.mceconomy.command.shop;
 
 import leehj050211.mceconomy.command.CustomCommandExecutor;
 import leehj050211.mceconomy.constant.ErrorMsgConstant;
-import leehj050211.mceconomy.event.shop.OpenShopPurchaseEvent;
+import leehj050211.mceconomy.event.shop.OpenShopEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,7 +21,7 @@ public class OpenShopCommand extends CustomCommandExecutor {
             sender.sendMessage(ErrorMsgConstant.InvalidCommandExecutor);
             return true;
         }
-        Bukkit.getPluginManager().callEvent(new OpenShopPurchaseEvent(player));
+        Bukkit.getPluginManager().callEvent(new OpenShopEvent(player));
         return true;
     }
 }

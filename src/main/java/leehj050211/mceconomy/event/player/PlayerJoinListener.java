@@ -2,7 +2,7 @@ package leehj050211.mceconomy.event.player;
 
 import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.domain.job.type.JobType;
-import leehj050211.mceconomy.event.job.OpenJobListEvent;
+import leehj050211.mceconomy.event.job.OpenSelectJobEvent;
 import leehj050211.mceconomy.global.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ public class PlayerJoinListener implements Listener {
         PlayerData playerData = playerManager.getData(player.getUniqueId());
 
         if (playerData.getJob() == JobType.JOBLESS) {
-            Bukkit.getPluginManager().callEvent(new OpenJobListEvent(player));
+            Bukkit.getPluginManager().callEvent(new OpenSelectJobEvent(player));
         }
     }
 }

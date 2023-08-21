@@ -20,10 +20,10 @@ public class ShopItemToolbarProvider implements SGToolbarBuilder {
 
     @Override
     public SGButton buildToolbarButton(int slot, int page, SGToolbarButtonType defaultType, SGMenu menu) {
-        if (slot == 3 && menu.getCurrentPage() > 0) {
+        if (slot == 2 && menu.getCurrentPage() > 0) {
             return MenuToolbarProvider.getPrevButton(menu);
         }
-        if (slot == 5 && menu.getCurrentPage() < menu.getMaxPage() - 1) {
+        if (slot == 6 && menu.getCurrentPage() < menu.getMaxPage() - 1) {
             return MenuToolbarProvider.getNextButton(menu);
         }
 
