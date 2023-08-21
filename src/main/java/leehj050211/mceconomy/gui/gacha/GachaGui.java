@@ -106,10 +106,10 @@ public class GachaGui extends CustomGui {
             () -> Bukkit.broadcastMessage(
                 ChatColor.YELLOW + playerData.getNickname() + "님이 " + gachaType.getName()
                     + "를 시작했습니다!"),
-            () -> {
-                Bukkit.broadcastMessage(ChatColor.YELLOW + "와! 샌즈!");
-            },
-            (t) -> Bukkit.broadcastMessage(ChatColor.YELLOW + "가챠 뽑는중 " + (t.getSecondsLeft()))
+            () -> Bukkit.broadcastMessage(
+                ChatColor.YELLOW + playerData.getNickname() + "님이 " + "와 샌즈"
+                    + "를 획득했습니다."),
+            (t) -> player.sendMessage(ChatColor.BLUE + "가챠 뽑는중 " + (t.getSecondsLeft()))
         );
 
         timer.scheduleTimer();
