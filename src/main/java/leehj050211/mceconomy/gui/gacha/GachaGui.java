@@ -6,6 +6,8 @@ import leehj050211.mceconomy.constant.MenuConstant;
 import leehj050211.mceconomy.constant.MenuId;
 import leehj050211.mceconomy.dao.PlayerDao;
 import leehj050211.mceconomy.domain.gacha.GachaItem;
+import leehj050211.mceconomy.domain.gacha.diamond.DiamondGachaItem;
+import leehj050211.mceconomy.domain.gacha.emerald.EmeraldGachaItem;
 import leehj050211.mceconomy.domain.gacha.normal.NormalGachaItem;
 import leehj050211.mceconomy.domain.gacha.type.GachaType;
 import leehj050211.mceconomy.domain.player.PlayerData;
@@ -125,6 +127,10 @@ public class GachaGui extends CustomGui {
         switch (gachaType) {
             case NORMAL_GACHA:
                 return getRandomItem(NormalGachaItem.values());
+            case EMERALD_GACHA:
+                return getRandomItem(EmeraldGachaItem.values());
+            case DIAMOND_GACHA:
+                return getRandomItem(DiamondGachaItem.values());
             default:
                 return null;
         }

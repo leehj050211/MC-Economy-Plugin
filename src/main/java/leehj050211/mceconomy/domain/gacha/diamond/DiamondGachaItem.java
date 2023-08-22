@@ -1,4 +1,4 @@
-package leehj050211.mceconomy.domain.gacha.normal;
+package leehj050211.mceconomy.domain.gacha.diamond;
 
 import leehj050211.mceconomy.domain.gacha.GachaItem;
 import lombok.Getter;
@@ -7,14 +7,14 @@ import org.bukkit.Material;
 
 @Getter
 @RequiredArgsConstructor
-public enum NormalGachaItem implements GachaItem {
+public enum DiamondGachaItem implements GachaItem {
 
-    DIRT(0, "흙", Material.DIRT, 0.2),
-    COAL(1, "석탄", Material.COAL, 0.15),
-    RAW_IRON(2, "철 원석", Material.RAW_IRON, 0.1),
-    BAT_SPAWN_EGG(3, "박쥐 생성 알", Material.BAT_SPAWN_EGG, 0.07),
-    ENDER_EYE(4, "엔더드래곤의 눈", Material.ENDER_EYE, 0.05),
-    EMERALD_BLOCK(5, "에메랄드 블록", Material.EMERALD_BLOCK, 0.01);
+    EXPERIENCE_BOTTLE(0, "경험치 병", Material.EXPERIENCE_BOTTLE, 0.4),
+    EMERALD(1, "에메랄드", Material.EMERALD, 0.26),
+    DIAMOND(2, "다이아몬드", Material.DIAMOND, 0.20),
+    DRAGON_HEAD(3, "드래곤 머리", Material.DRAGON_HEAD, 0.1),
+    ELYTRA(4, "겉날개", Material.ELYTRA, 0.03999),
+    NETHERITE_INGOT(5, "네더라이트 주괴", Material.NETHERITE_INGOT, 0.00001);
 
     private final int value;
     private final String name;
