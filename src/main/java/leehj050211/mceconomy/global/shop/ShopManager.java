@@ -24,19 +24,19 @@ public class ShopManager {
         return instance;
     }
 
-    public ShopManager() {
-        initData();
-    }
-
     private static final HashMap<ShopItemData, ShopPriceCategory> priceCategory = new HashMap<>();
     private static final HashMap<ShopItemCategory, ShopPriceCategory> itemCategoryPrice = new HashMap<>();
     private static final HashMap<Material, ShopItemData> itemDataList = new HashMap<>();
     private static final HashMap<ShopItemCategory, List<ShopItemData>> itemCategoryList = new HashMap<>();
 
-    private final PlayerManager playerManager = PlayerManager.getInstance();
-    private final ShopItemDao shopItemDao = ShopItemDao.getInstance();
+    private static final PlayerManager playerManager = PlayerManager.getInstance();
+    private static final ShopItemDao shopItemDao = ShopItemDao.getInstance();
 
-    private void initData() {
+    static {
+        initData();
+    }
+
+    private static void initData() {
         shopItemDao.findAll().forEach(data -> {
             priceCategory.put(data, data.getPriceCategory());
             itemDataList.put(data.getMaterial(), data);
