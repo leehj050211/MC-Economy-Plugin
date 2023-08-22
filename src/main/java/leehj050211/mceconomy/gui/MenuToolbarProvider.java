@@ -5,9 +5,9 @@ import com.samjakob.spigui.item.ItemBuilder;
 import com.samjakob.spigui.menu.SGMenu;
 import com.samjakob.spigui.toolbar.SGToolbarBuilder;
 import com.samjakob.spigui.toolbar.SGToolbarButtonType;
-import lombok.AllArgsConstructor;
+import leehj050211.mceconomy.constant.IconConstant;
+import leehj050211.mceconomy.global.util.CustomHeadUtil;
 import lombok.NoArgsConstructor;
-import org.bukkit.Material;
 import org.bukkit.event.Event;
 
 @NoArgsConstructor
@@ -29,7 +29,7 @@ public class MenuToolbarProvider implements SGToolbarBuilder {
     }
 
     public static SGButton getPrevButton(SGMenu menu) {
-        return new SGButton(new ItemBuilder(Material.ARROW)
+        return new SGButton(new ItemBuilder(CustomHeadUtil.getHead(IconConstant.LEFT_ARROW))
                 .name("&a&l← 이전 페이지")
                 .build()
         ).withListener(event -> {
@@ -38,9 +38,18 @@ public class MenuToolbarProvider implements SGToolbarBuilder {
         });
     }
 
+    public static SGButton getDisabledPrevButton() {
+        return new SGButton(new ItemBuilder(CustomHeadUtil.getHead(IconConstant.DISABLED_LEFT_ARROW))
+                .name("&8&l← 이전 페이지")
+                .build()
+        ).withListener(event -> {
+            event.setResult(Event.Result.DENY);
+        });
+    }
+
     public static SGButton getNextButton(SGMenu menu) {
-        return new SGButton(new ItemBuilder(Material.ARROW)
-                .name("&a&l 다음 페이지 →")
+        return new SGButton(new ItemBuilder(CustomHeadUtil.getHead(IconConstant.RIGHT_ARROW))
+                .name("&a&l다음 페이지 →")
                 .build()
         ).withListener(event -> {
             event.setResult(Event.Result.DENY);
@@ -48,13 +57,28 @@ public class MenuToolbarProvider implements SGToolbarBuilder {
         });
     }
 
+    public static SGButton getDisabledNextButton() {
+        return new SGButton(new ItemBuilder(CustomHeadUtil.getHead(IconConstant.DISABLED_RIGHT_ARROW))
+                .name("&8&l다음 페이지 →")
+                .build()
+        ).withListener(event -> {
+            event.setResult(Event.Result.DENY);
+        });
+    }
+
     @Override
     public SGButton buildToolbarButton(int slot, int page, SGToolbarButtonType defaultType, SGMenu menu) {
-        if (slot == prevButtonSlot && menu.getCurrentPage() > 0) {
-            return getPrevButton(menu);
+        if (slot == prevButtonSlot) {
+            if (menu.getCurrentPage() > 0) {
+                return getPrevButton(menu);
+            }
+            return getDisabledPrevButton();
         }
-        if (slot == nextButtonSlot && menu.getCurrentPage() < menu.getMaxPage() - 1) {
-            return getNextButton(menu);
+        if (slot == nextButtonSlot) {
+            if (menu.getCurrentPage() < menu.getMaxPage() - 1) {
+                return getNextButton(menu);
+            }
+            return getDisabledNextButton();
         }
         for (ToolbarButton button : toolbarButtons) {
             if (slot == button.getSlot()) {

@@ -3,10 +3,12 @@ package leehj050211.mceconomy.gui.shop;
 import com.samjakob.spigui.buttons.SGButton;
 import com.samjakob.spigui.item.ItemBuilder;
 import com.samjakob.spigui.menu.SGMenu;
+import leehj050211.mceconomy.constant.IconConstant;
 import leehj050211.mceconomy.domain.shop.type.ShopCategory;
 import leehj050211.mceconomy.domain.shop.type.ShopItemCategory;
 import leehj050211.mceconomy.event.shop.OpenShopEvent;
 import leehj050211.mceconomy.event.shop.SelectShopItemCategoryEvent;
+import leehj050211.mceconomy.global.util.CustomHeadUtil;
 import leehj050211.mceconomy.global.util.ItemUtil;
 import leehj050211.mceconomy.gui.MenuToolbarProvider;
 import leehj050211.mceconomy.gui.ToolbarButton;
@@ -44,7 +46,7 @@ public class ShopItemCategoryGui {
         ToolbarButton[] buttons = {
                 new ToolbarButton(1, getPrevMenuButton())
         };
-        sgMenu.setToolbarBuilder(new MenuToolbarProvider(0, 8, buttons));
+        sgMenu.setToolbarBuilder(new MenuToolbarProvider(2, 3, buttons));
         return sgMenu.getInventory();
     }
 
@@ -65,8 +67,8 @@ public class ShopItemCategoryGui {
     }
 
     private SGButton getPrevMenuButton() {
-        return new SGButton(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE)
-                .name("이전 메뉴")
+        return new SGButton(new ItemBuilder(CustomHeadUtil.getHead(IconConstant.BACKWARD))
+                .name("&l이전 메뉴")
                 .build()
         ).withListener(event -> {
             Bukkit.getPluginManager().callEvent(new OpenShopEvent(player));

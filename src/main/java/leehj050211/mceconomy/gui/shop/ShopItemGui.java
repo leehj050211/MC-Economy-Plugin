@@ -4,12 +4,14 @@ import com.samjakob.spigui.buttons.SGButton;
 import com.samjakob.spigui.item.ItemBuilder;
 import com.samjakob.spigui.menu.SGMenu;
 import leehj050211.mceconomy.MCEconomy;
+import leehj050211.mceconomy.constant.IconConstant;
 import leehj050211.mceconomy.domain.shop.ShopItemData;
 import leehj050211.mceconomy.domain.shop.ShopPriceCategory;
 import leehj050211.mceconomy.domain.shop.type.ShopItemCategory;
 import leehj050211.mceconomy.event.shop.OpenShopEvent;
 import leehj050211.mceconomy.event.shop.SelectShopCategoryEvent;
 import leehj050211.mceconomy.global.shop.ShopManager;
+import leehj050211.mceconomy.global.util.CustomHeadUtil;
 import leehj050211.mceconomy.global.util.Formatter;
 import leehj050211.mceconomy.global.util.ItemUtil;
 import leehj050211.mceconomy.gui.MenuToolbarProvider;
@@ -21,6 +23,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -70,14 +73,13 @@ public class ShopItemGui implements Listener {
 
         ToolbarButton[] buttons = {
                 new ToolbarButton(1, getPrevMenuButton()),
-                new ToolbarButton(2, getUpdateAmountButton(1)),
-                new ToolbarButton(3, getUpdateAmountButton(8)),
                 new ToolbarButton(4, getPriceCategoryIcon(priceCategory)),
-                new ToolbarButton(5, getUpdateAmountButton(16)),
-                new ToolbarButton(6, getUpdateAmountButton(32)),
-                new ToolbarButton(7, getUpdateAmountButton(64)),
+                new ToolbarButton(5, getUpdateAmountButton(1)),
+                new ToolbarButton(6, getUpdateAmountButton(8)),
+                new ToolbarButton(7, getUpdateAmountButton(16)),
+                new ToolbarButton(8, getUpdateAmountButton(64)),
         };
-        sgMenu.setToolbarBuilder(new MenuToolbarProvider(0, 8, buttons));
+        sgMenu.setToolbarBuilder(new MenuToolbarProvider(2, 3, buttons));
         sgMenu.refreshInventory(player);
     }
 
@@ -91,30 +93,31 @@ public class ShopItemGui implements Listener {
         return new SGButton(item)
                 .withListener(event -> {
                     event.setResult(Event.Result.DENY);
-                    selectItem(itemData, amount);
+                    selectItem(event, itemData, amount);
                 });
     }
 
 
-    private void selectItem(ShopItemData itemData, int amount) {
+    private void selectItem(InventoryClickEvent event, ShopItemData itemData, int amount) {
         shopManager.buyItem(player, itemData.getMaterial(), amount);
         player.getInventory().addItem(new ItemStack(itemData.getMaterial(), amount));
         refresh();
+        event.setResult(Event.Result.DENY);
     }
 
     private String getMenuDepthTitle() {
         if (itemCategory.getParentCategory().hasChildCategory()) {
             return String.format("상점 > %s > %s", itemCategory.getParentCategory().getName(), itemCategory.getName());
-        } else {
-            return "상점 > " + itemCategory.getName();
         }
+        return "상점 > " + itemCategory.getName();
     }
 
     private SGButton getPrevMenuButton() {
-        return new SGButton(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE)
-                .name("이전 메뉴")
+        return new SGButton(new ItemBuilder(CustomHeadUtil.getHead(IconConstant.BACKWARD))
+                .name("&l이전 메뉴")
                 .build()
         ).withListener(event -> {
+            event.setResult(Event.Result.DENY);
             if (itemCategory.getParentCategory().hasChildCategory()) {
                 Bukkit.getPluginManager().callEvent(new SelectShopCategoryEvent(player, itemCategory.getParentCategory()));
             } else {
