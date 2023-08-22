@@ -63,7 +63,7 @@ public class ShopItemCategoryGui {
     }
 
     private String getMenuDepthTitle() {
-        return "상점 > " + category.getName();
+        return "메뉴 > 상점 > " + category.getName();
     }
 
     private SGButton getPrevMenuButton() {

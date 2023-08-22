@@ -1,6 +1,8 @@
 package leehj050211.mceconomy.command;
 
 import leehj050211.mceconomy.MCEconomy;
+import leehj050211.mceconomy.command.job.TpWorkspaceCommand;
+import leehj050211.mceconomy.command.menu.OpenMenuCommand;
 import leehj050211.mceconomy.command.money.SendMoneyCommand;
 import leehj050211.mceconomy.command.shop.OpenShopCommand;
 import leehj050211.mceconomy.global.exception.CommandExceptionHandler;
@@ -16,8 +18,10 @@ public class CommandManager {
         }
         Server server = plugin.getServer();
         CustomCommandExecutor[] executors = {
+                new OpenMenuCommand(),
                 new SendMoneyCommand(),
-                new OpenShopCommand()
+                new OpenShopCommand(),
+                new TpWorkspaceCommand(),
         };
 
         for (CustomCommandExecutor executor : executors) {

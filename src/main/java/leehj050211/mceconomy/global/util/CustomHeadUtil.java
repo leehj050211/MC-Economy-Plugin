@@ -4,6 +4,7 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerTextures;
@@ -16,6 +17,14 @@ import java.util.UUID;
 public class CustomHeadUtil {
 
     private final String minecraftUrl = "http://textures.minecraft.net/texture/";
+
+    public ItemStack getHead(Player player) {
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta meta = (SkullMeta) head.getItemMeta();
+        meta.setOwningPlayer(player);
+        head.setItemMeta(meta);
+        return head;
+    }
 
     public ItemStack getHead(String textureId) {
         try {

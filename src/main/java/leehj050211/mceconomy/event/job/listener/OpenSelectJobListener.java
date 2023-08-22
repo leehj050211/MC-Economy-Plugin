@@ -1,5 +1,6 @@
-package leehj050211.mceconomy.event.job;
+package leehj050211.mceconomy.event.job.listener;
 
+import leehj050211.mceconomy.event.job.OpenSelectJobEvent;
 import leehj050211.mceconomy.gui.job.SelectJobGui;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

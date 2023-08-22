@@ -1,5 +1,6 @@
-package leehj050211.mceconomy.event.shop;
+package leehj050211.mceconomy.event.shop.listener;
 
+import leehj050211.mceconomy.event.shop.OpenShopEvent;
 import leehj050211.mceconomy.gui.shop.ShopCategoryGui;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

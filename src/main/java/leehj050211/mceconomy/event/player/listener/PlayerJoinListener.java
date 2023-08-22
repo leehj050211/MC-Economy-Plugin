@@ -1,4 +1,4 @@
-package leehj050211.mceconomy.event.player;
+package leehj050211.mceconomy.event.player.listener;
 
 import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.domain.job.type.JobType;
