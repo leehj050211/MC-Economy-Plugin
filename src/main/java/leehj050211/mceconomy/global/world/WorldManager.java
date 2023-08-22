@@ -11,14 +11,14 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class WorldManager {
 
-    private final PlayerManager playerManager = PlayerManager.getInstance();
-    private static final Map<JobType, World> worlds = new HashMap<>();
     private static WorldManager instance;
     public static WorldManager getInstance() {
         if (instance == null) {
@@ -27,30 +27,34 @@ public class WorldManager {
         return instance;
     }
 
-    public static void WorldInit() {
-        for(JobType i : JobType.values()) {
-            World world = Bukkit.getWorld(i.getName());
-            if(world != null) {
-                continue;
-            }
-            if(i.isWorldGen() == false) {
-                continue;
-            }
-            WorldCreator worldCreator = new WorldCreator(i.getName());
-            worldCreator.type(WorldType.FLAT);
-            world = worldCreator.createWorld();
-            worlds.put(i, world);
-        }
+    private final PlayerManager playerManager = PlayerManager.getInstance();
+    private static final Map<String, World> worlds = new HashMap<>();
+
+    static {
+        initWorkspaceWorlds();
     }
 
-    public void tpToJobWorld(Player player) {
+    private static void initWorkspaceWorlds() {
+        Arrays.stream(JobType.values())
+                .filter(jobType -> {
+                    World world = Bukkit.getWorld(jobType.name());
+                    return jobType.hasWorkspace() && world == null;
+                })
+                .forEach(jobType -> {
+                    WorldCreator worldCreator = new WorldCreator(jobType.getWorkspaceWorldName());
+                    worldCreator.type(WorldType.FLAT);
+                    World world = worldCreator.createWorld();
+                    worlds.put(jobType.getWorkspaceWorldName(), world);
+                });
+    }
+
+    public void tpToWorkspace(Player player) {
         PlayerData playerData = playerManager.getData(player.getUniqueId());
-        JobType playerJob = playerData.getJob();
-        World jobWorld = worlds.get(playerJob.getName());
-        if(!playerJob.isWorldGen()) {
-            //Exception - 이동할 수 없음
+        JobType jobType = playerData.getJob();
+        if(!jobType.hasWorkspace()) {
             new GeneralMCPlayerException(playerData.getUuid(), "해당 직업은 별도의 작업장이 없습니다.");
         }
-        player.teleport(jobWorld.getSpawnLocation());
+        World workspace = worlds.get(jobType.getWorkspaceWorldName());
+        player.teleport(workspace.getSpawnLocation());
     }
 }

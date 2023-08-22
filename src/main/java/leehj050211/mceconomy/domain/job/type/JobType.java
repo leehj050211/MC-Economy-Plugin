@@ -1,5 +1,6 @@
 package leehj050211.mceconomy.domain.job.type;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
@@ -16,5 +17,15 @@ public enum JobType {
     private final String name;
     private final String description;
     private final Material icon;
-    private final boolean worldGen;
+
+    @Getter(AccessLevel.NONE)
+    private final boolean hasWorkspace;
+
+    public boolean hasWorkspace() {
+        return hasWorkspace;
+    }
+
+    public String getWorkspaceWorldName() {
+        return "world_workspace_" + this.name().toLowerCase();
+    }
 }
