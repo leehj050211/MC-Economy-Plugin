@@ -7,7 +7,6 @@ import leehj050211.mceconomy.global.shop.ShopManager;
 import leehj050211.mceconomy.global.task.SaveDataTask;
 import leehj050211.mceconomy.global.task.StatusWindowTask;
 import leehj050211.mceconomy.gui.MenuToolbarProvider;
-import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MCEconomy extends JavaPlugin {
@@ -32,7 +31,6 @@ public class MCEconomy extends JavaPlugin {
 
         SaveDataTask.getInstance().start();
         StatusWindowTask.getInstance().start();
-
     }
 
     @Override
