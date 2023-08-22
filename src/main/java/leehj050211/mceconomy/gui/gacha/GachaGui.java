@@ -5,6 +5,8 @@ import leehj050211.mceconomy.MCEconomy;
 import leehj050211.mceconomy.constant.MenuConstant;
 import leehj050211.mceconomy.constant.MenuId;
 import leehj050211.mceconomy.dao.PlayerDao;
+import leehj050211.mceconomy.domain.gacha.GachaItem;
+import leehj050211.mceconomy.domain.gacha.normal.NormalGachaItem;
 import leehj050211.mceconomy.domain.gacha.type.GachaType;
 import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.event.gacha.OpenGachaEvent;
@@ -55,10 +57,10 @@ public class GachaGui extends CustomGui {
         ItemStack icon = new ItemStack(gachaType.getIcon(), 1);
         ItemMeta meta = icon.getItemMeta();
 
-        ItemUtil.setItemData(meta, MenuConstant.SELECT_JOB_KEY, PersistentDataType.STRING,
+        ItemUtil.setItemData(meta, MenuConstant.SELECT_GACHA_KEY, PersistentDataType.STRING,
             gachaType.name());
         meta.setDisplayName(gachaType.getName());
-        meta.setLore(List.of(gachaType.getDescription()));
+        meta.setLore(List.of(gachaType.getPrice() + "원"));
         icon.setItemMeta(meta);
         return icon;
     }
@@ -67,37 +69,23 @@ public class GachaGui extends CustomGui {
     protected void onClick(InventoryClickEvent event, Player player,
         ItemStack item, String subId, int currentPage) {
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_JOB_KEY);
+        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(),
+            MenuConstant.SELECT_GACHA_KEY);
 
         GachaType gachaType = GachaType.valueOf(data.get(key, PersistentDataType.STRING));
 
         PlayerData playerData = playerManager.getData(player.getUniqueId());
-        if (gachaType == GachaType.NORMAL_GACHA) {
-            if (playerData.getMoney() < 100L) {
-                player.closeInventory();
-                Long lackMoney = 100L - playerData.getMoney();
-                player.sendMessage(ChatColor.DARK_RED + "에러: " + "돈이 " + lackMoney + "원 부족합니다.");
-            }
-            playerData.decreaseMoney(100L);
-        }
-        if (gachaType == GachaType.EMERALD_GACHA) {
-            if (playerData.getMoney() < 1000L) {
-                player.closeInventory();
-                Long lackMoney = 1000L - playerData.getMoney();
-                player.sendMessage(ChatColor.DARK_RED + "에러: " + "돈이 " + lackMoney + "원 부족합니다.");
-            }
-            playerData.decreaseMoney(1000L);
-        }
-        if (gachaType == GachaType.DIAMOND_GACHA) {
-            if (playerData.getMoney() < 10000L) {
-                player.closeInventory();
-                Long lackMoney = 10000L - playerData.getMoney();
-                player.sendMessage(ChatColor.DARK_RED + "에러: " + "돈이 " + lackMoney + "원 부족합니다.");
-            }
-            playerData.decreaseMoney(10000L);
+
+        if (playerData.getMoney() < gachaType.getPrice()) {
+            player.closeInventory();
+            long lackMoney = gachaType.getPrice() - playerData.getMoney();
+            player.sendMessage(ChatColor.DARK_RED + "에러: " + "돈이 " + lackMoney + "원 부족합니다.");
+            return;
         }
 
+        playerData.decreaseMoney(gachaType.getPrice());
         playerDao.update(playerData);
+
         player.sendMessage(gachaType.getName() + "가 시작됩니다.");
         player.closeInventory();
 
@@ -106,13 +94,55 @@ public class GachaGui extends CustomGui {
             () -> Bukkit.broadcastMessage(
                 ChatColor.YELLOW + playerData.getNickname() + "님이 " + gachaType.getName()
                     + "를 시작했습니다!"),
-            () -> Bukkit.broadcastMessage(
-                ChatColor.YELLOW + playerData.getNickname() + "님이 " + "와 샌즈"
-                    + "를 획득했습니다."),
-            (t) -> player.sendMessage(ChatColor.BLUE + "가챠 뽑는중 " + (t.getSecondsLeft()))
+            () -> {
+                GachaItem gachaItem = getRandomGachaItem(gachaType);
+
+                ItemStack itemStack = new ItemStack(gachaItem.getIcon());
+                player.getInventory().addItem(itemStack);
+
+                String gachaMessage = "";
+                if (gachaItem.getProbability() <= 0.1) {
+                    gachaMessage += ChatColor.DARK_AQUA + playerData.getNickname() + "님이 "
+                        + gachaItem.getProbability() * 100 + "%의 확률을 뚫고 \"" + gachaItem.getName()
+                        + "\" 을/를 획득했습니다.";
+                } else {
+                    gachaMessage +=
+                        ChatColor.YELLOW + playerData.getNickname() + "님이 \"" + gachaItem.getName()
+                            + "\" 을/를 획득했습니다.";
+                }
+
+                Bukkit.broadcastMessage(
+                    gachaMessage);
+
+            },
+            (t) -> player.sendMessage(ChatColor.BLUE + "가챠 뽑는중 " + t.getSecondsLeft())
         );
 
         timer.scheduleTimer();
+    }
+
+    private GachaItem getRandomGachaItem(GachaType gachaType) {
+        switch (gachaType) {
+            case NORMAL_GACHA:
+                return getRandomItem(NormalGachaItem.values());
+            default:
+                return null;
+        }
+    }
+
+    private <T extends GachaItem> GachaItem getRandomItem(T[] possibleItems) {
+        double randomValue = Math.random();
+        double cumulativeProbability = 0.0;
+
+        for (T gachaItem : possibleItems) {
+            cumulativeProbability += gachaItem.getProbability();
+
+            if (randomValue <= cumulativeProbability) {
+                return gachaItem;
+            }
+        }
+
+        return null;
     }
 
 }
