@@ -21,22 +21,25 @@ public class ShopPriceCategory {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "base_price")
     private Long basePrice;
 
     @Column(nullable = false)
     private Long amount;
 
+    @Column(nullable = false, name = "avg_amount")
+    private Long avgAmount;
+
     @Column(nullable = false)
     private Long supply;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "last_supply")
     private Long lastSupply;
 
     @Column(nullable = false)
     private Long demand;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "last_demand")
     private Long lastDemand;
 
     public void increaseSupply(int amount) {
