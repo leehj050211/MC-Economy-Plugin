@@ -32,6 +32,6 @@ public class HibernateUtil {
                 .addAnnotatedClass(ShopPriceCategory.class)
                 .addAnnotatedClass(ShopItemData.class);
 
-        sessionFactory = configuration.buildSessionFactory();;
+        sessionFactory = configuration.buildSessionFactory();
     }
 }

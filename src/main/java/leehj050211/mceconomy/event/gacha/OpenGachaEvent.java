@@ -1,4 +1,4 @@
-package leehj050211.mceconomy.event.job;
+package leehj050211.mceconomy.event.gacha;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +9,10 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 @RequiredArgsConstructor
-public class OpenJobMenuEvent extends Event {
+public class OpenGachaEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-    private final Player player;
+    public final Player player;
 
     @Override
     public @NotNull HandlerList getHandlers() {
@@ -22,5 +22,4 @@ public class OpenJobMenuEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
-
 }

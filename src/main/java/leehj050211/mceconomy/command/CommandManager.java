@@ -1,6 +1,7 @@
 package leehj050211.mceconomy.command;
 
 import leehj050211.mceconomy.MCEconomy;
+import leehj050211.mceconomy.command.gacha.GachaCommand;
 import leehj050211.mceconomy.command.job.TpWorkspaceCommand;
 import leehj050211.mceconomy.command.menu.OpenMenuCommand;
 import leehj050211.mceconomy.command.money.SendMoneyCommand;
@@ -20,6 +21,8 @@ public class CommandManager {
         CustomCommandExecutor[] executors = {
                 new OpenMenuCommand(),
                 new SendMoneyCommand(),
+                new OpenShopCommand(),
+                new GachaCommand(),
                 new OpenShopCommand(),
                 new TpWorkspaceCommand(),
         };

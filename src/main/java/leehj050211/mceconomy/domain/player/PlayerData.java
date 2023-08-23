@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import leehj050211.mceconomy.domain.job.type.JobType;
 import leehj050211.mceconomy.domain.job.type.JobTypeConverter;
 import leehj050211.mceconomy.exception.money.InvalidMoneyException;
+import leehj050211.mceconomy.exception.money.NotEnoughMoneyException;
 import leehj050211.mceconomy.global.exception.GeneralMCPlayerException;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -46,18 +47,22 @@ public class PlayerData {
     }
 
     public void increaseMoney(Long money) throws GeneralMCPlayerException {
-        if (money >= 0) {
-            this.money += money;
-        } else {
+        if (money < 0) {
             throw new InvalidMoneyException(this.uuid);
         }
+        this.money += money;
     }
 
     public void decreaseMoney(Long money) throws GeneralMCPlayerException {
-        if (money >= 0 && this.money >= money) {
-            this.money -= money;
-        } else {
+        if (money < 0) {
             throw new InvalidMoneyException(this.uuid);
         }
+
+        if (this.money < money) {
+            throw new NotEnoughMoneyException(this.uuid, money - this.money);
+        }
+
+        this.money -= money;
     }
+
 }
