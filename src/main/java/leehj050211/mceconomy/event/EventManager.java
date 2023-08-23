@@ -1,6 +1,7 @@
 package leehj050211.mceconomy.event;
 
 import leehj050211.mceconomy.MCEconomy;
+import leehj050211.mceconomy.event.gacha.listener.OpenGachaListener;
 import leehj050211.mceconomy.event.job.listener.OpenJobMenuListener;
 import leehj050211.mceconomy.event.job.listener.OpenSelectJobListener;
 import leehj050211.mceconomy.event.menu.listener.OpenMenuListener;
@@ -31,7 +32,8 @@ public class EventManager {
                 new OpenSelectJobListener(),
                 new OpenShopListener(),
                 new SelectShopCategoryListener(),
-                new SelectShopItemCategoryListener()
+                new SelectShopItemCategoryListener(),
+                new OpenGachaListener()
         };
 
         for (Listener listener : listeners) {

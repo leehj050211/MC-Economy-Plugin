@@ -1,81 +1,68 @@
 package leehj050211.mceconomy.gui.gacha;
 
-import java.util.List;
+import com.samjakob.spigui.buttons.SGButton;
+import com.samjakob.spigui.item.ItemBuilder;
+import com.samjakob.spigui.menu.SGMenu;
 import leehj050211.mceconomy.MCEconomy;
-import leehj050211.mceconomy.constant.MenuConstant;
-import leehj050211.mceconomy.constant.MenuId;
-import leehj050211.mceconomy.dao.PlayerDao;
+import leehj050211.mceconomy.constant.IconConstant;
 import leehj050211.mceconomy.domain.gacha.GachaItem;
 import leehj050211.mceconomy.domain.gacha.diamond.DiamondGachaItem;
 import leehj050211.mceconomy.domain.gacha.emerald.EmeraldGachaItem;
 import leehj050211.mceconomy.domain.gacha.normal.NormalGachaItem;
 import leehj050211.mceconomy.domain.gacha.type.GachaType;
 import leehj050211.mceconomy.domain.player.PlayerData;
-import leehj050211.mceconomy.event.gacha.OpenGachaEvent;
+import leehj050211.mceconomy.event.menu.OpenMenuEvent;
 import leehj050211.mceconomy.global.player.PlayerManager;
+import leehj050211.mceconomy.global.util.CustomHeadUtil;
+import leehj050211.mceconomy.global.util.Formatter;
 import leehj050211.mceconomy.global.util.ItemUtil;
-import leehj050211.mceconomy.gui.CustomGui;
-import leehj050211.mceconomy.gui.ItemMenu;
-import leehj050211.mceconomy.util.CountDownTimer;
+import leehj050211.mceconomy.gui.MenuToolbarProvider;
+import leehj050211.mceconomy.gui.ToolbarButton;
+import leehj050211.mceconomy.global.util.CountDownTimer;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
-public class GachaGui extends CustomGui {
+import static leehj050211.mceconomy.MCEconomy.spiGUI;
+
+@RequiredArgsConstructor
+public class GachaGui {
 
     private final PlayerManager playerManager = PlayerManager.getInstance();
 
-    private final PlayerDao playerDao = PlayerDao.getInstance();
+    private static final int ROWS = 1;
+    private final SGMenu sgMenu = spiGUI.create("메뉴 > 가챠(뽑기) ({currentPage}/{maxPage})", ROWS);
+    private final Player player;
 
-    private final int pageSize = 1;
+    public Inventory getInventory() {
+        sgMenu.setAutomaticPaginationEnabled(true);
 
-    public GachaGui() {
-        super(MenuId.SELECT_GACHA);
-    }
-
-    @EventHandler
-    public void onOpenGacha(OpenGachaEvent event) {
-        openPage(event.player, null, 1);
-    }
-
-    @Override
-    protected void openPage(Player player, String subId, int currentPage) {
-        ItemMenu[] itemMenus = new ItemMenu[GachaType.values().length];
-        for (int i = 0; i < GachaType.values().length; i++) {
-            itemMenus[i] = new ItemMenu(i, getGachaIcon(GachaType.values()[i]));
+        for (int i = 0; i< GachaType.values().length; i++) {
+            sgMenu.setButton(
+                    ItemUtil.getPage(i, ROWS),
+                    ItemUtil.getSlot(i, ROWS),
+                    getGachaIcon(GachaType.values()[i]));
         }
-
-        openMenu(player, pageSize, currentPage, subId, "가챠 선택", itemMenus);
+        ToolbarButton[] buttons = {
+                new ToolbarButton(1, getPrevMenuButton())
+        };
+        sgMenu.setToolbarBuilder(new MenuToolbarProvider(2, 3, buttons));
+        return sgMenu.getInventory();
     }
 
-    private static ItemStack getGachaIcon(GachaType gachaType) {
-        ItemStack icon = new ItemStack(gachaType.getIcon(), 1);
-        ItemMeta meta = icon.getItemMeta();
-
-        ItemUtil.setItemData(meta, MenuConstant.SELECT_GACHA_KEY, PersistentDataType.STRING,
-            gachaType.name());
-        meta.setDisplayName(gachaType.getName());
-        meta.setLore(List.of(gachaType.getPrice() + "원"));
-        icon.setItemMeta(meta);
-        return icon;
+    private SGButton getGachaIcon(GachaType gachaType) {
+        ItemStack icon = new ItemBuilder(gachaType.getIcon())
+                .name(gachaType.getName())
+                .lore(Formatter.formatMoney(gachaType.getPrice()))
+                .build();
+        return new SGButton(icon)
+                .withListener(event -> onClickGacha(gachaType));
     }
 
-    @Override
-    protected void onClick(InventoryClickEvent event, Player player,
-        ItemStack item, String subId, int currentPage) {
-        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(),
-            MenuConstant.SELECT_GACHA_KEY);
-
-        GachaType gachaType = GachaType.valueOf(data.get(key, PersistentDataType.STRING));
-
+    private void onClickGacha(GachaType gachaType) {
         PlayerData playerData = playerManager.getData(player.getUniqueId());
 
         if (playerData.getMoney() < gachaType.getPrice()) {
@@ -86,54 +73,48 @@ public class GachaGui extends CustomGui {
         }
 
         playerData.decreaseMoney(gachaType.getPrice());
-        playerDao.update(playerData);
-
         player.sendMessage(gachaType.getName() + "가 시작됩니다.");
         player.closeInventory();
 
-        CountDownTimer timer = new CountDownTimer(MCEconomy.getInstance(),
-            3,
-            () -> Bukkit.broadcastMessage(
-                ChatColor.YELLOW + playerData.getNickname() + "님이 " + gachaType.getName()
-                    + "를 시작했습니다!"),
+        CountDownTimer timer = new CountDownTimer(MCEconomy.getInstance(), 3,
+            () -> {
+                Bukkit.broadcastMessage(
+                        String.format("%s%s님이 %s를 시작했습니다!", ChatColor.YELLOW, playerData.getNickname(), gachaType.getName())
+                );
+            },
             () -> {
                 GachaItem gachaItem = getRandomGachaItem(gachaType);
-
                 ItemStack itemStack = new ItemStack(gachaItem.getIcon());
                 player.getInventory().addItem(itemStack);
 
-                String gachaMessage = "";
+                String gachaMessage;
                 if (gachaItem.getProbability() <= 0.1) {
-                    gachaMessage += ChatColor.DARK_AQUA + playerData.getNickname() + "님이 "
-                        + gachaItem.getProbability() * 100 + "%의 확률을 뚫고 \"" + gachaItem.getName()
-                        + "\" 을/를 획득했습니다.";
+                    gachaMessage = String.format("%s%s님이 %d%의 확률을 뚫고 %s을(를) 획득했습니다!",
+                            ChatColor.DARK_AQUA,
+                            playerData.getNickname(),
+                            gachaItem.getProbability() * 100,
+                            gachaItem.getName());
                 } else {
-                    gachaMessage +=
-                        ChatColor.YELLOW + playerData.getNickname() + "님이 \"" + gachaItem.getName()
-                            + "\" 을/를 획득했습니다.";
+                    gachaMessage = String.format("%s%s님이 %s을(를) 획득했습니다.",
+                            ChatColor.YELLOW,
+                            playerData.getNickname(),
+                            gachaItem.getName());
                 }
 
-                Bukkit.broadcastMessage(
-                    gachaMessage);
-
+                Bukkit.broadcastMessage(gachaMessage);
             },
-            (t) -> player.sendMessage(ChatColor.BLUE + "가챠 뽑는중 " + t.getSecondsLeft())
+            (t) -> player.sendMessage(ChatColor.BLUE + "가챠 뽑는 중 " + t.getSecondsLeft())
         );
 
         timer.scheduleTimer();
     }
 
     private GachaItem getRandomGachaItem(GachaType gachaType) {
-        switch (gachaType) {
-            case NORMAL_GACHA:
-                return getRandomItem(NormalGachaItem.values());
-            case EMERALD_GACHA:
-                return getRandomItem(EmeraldGachaItem.values());
-            case DIAMOND_GACHA:
-                return getRandomItem(DiamondGachaItem.values());
-            default:
-                return null;
-        }
+        return switch (gachaType) {
+            case NORMAL_GACHA -> getRandomItem(NormalGachaItem.values());
+            case EMERALD_GACHA -> getRandomItem(EmeraldGachaItem.values());
+            case DIAMOND_GACHA -> getRandomItem(DiamondGachaItem.values());
+        };
     }
 
     private <T extends GachaItem> GachaItem getRandomItem(T[] possibleItems) {
@@ -151,4 +132,12 @@ public class GachaGui extends CustomGui {
         return null;
     }
 
+    private SGButton getPrevMenuButton() {
+        return new SGButton(new ItemBuilder(CustomHeadUtil.getHead(IconConstant.BACKWARD))
+                .name("&l이전 메뉴")
+                .build()
+        ).withListener(event -> {
+            Bukkit.getPluginManager().callEvent(new OpenMenuEvent(player));
+        });
+    }
 }

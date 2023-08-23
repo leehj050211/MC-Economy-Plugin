@@ -1,4 +1,4 @@
-package leehj050211.mceconomy.util;
+package leehj050211.mceconomy.global.util;
 
 import java.util.function.Consumer;
 import org.bukkit.Bukkit;

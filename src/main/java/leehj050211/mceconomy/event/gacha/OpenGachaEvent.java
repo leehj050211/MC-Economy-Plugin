@@ -1,11 +1,13 @@
 package leehj050211.mceconomy.event.gacha;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
 @RequiredArgsConstructor
 public class OpenGachaEvent extends Event {
 
@@ -20,5 +22,4 @@ public class OpenGachaEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
-
 }

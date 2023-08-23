@@ -6,6 +6,7 @@ import com.samjakob.spigui.menu.SGMenu;
 import leehj050211.mceconomy.dao.PlayerDao;
 import leehj050211.mceconomy.domain.job.type.JobType;
 import leehj050211.mceconomy.domain.player.PlayerData;
+import leehj050211.mceconomy.event.gacha.OpenGachaEvent;
 import leehj050211.mceconomy.event.job.OpenSelectJobEvent;
 import leehj050211.mceconomy.event.shop.OpenShopEvent;
 import leehj050211.mceconomy.global.player.PlayerManager;
@@ -29,9 +30,10 @@ public class MainMenuGui {
     private final Player player;
 
     public Inventory getInventory() {
-        sgMenu.setButton(11, getProfileMenu());
-        sgMenu.setButton(13, getJobMenu());
-        sgMenu.setButton(15, getShop());
+        sgMenu.setButton(10, getProfileMenu());
+        sgMenu.setButton(12, getJobMenu());
+        sgMenu.setButton(14, getShop());
+        sgMenu.setButton(16, getGacha());
         return sgMenu.getInventory();
     }
 
@@ -62,6 +64,16 @@ public class MainMenuGui {
         return new SGButton(icon)
                 .withListener(event -> {
                     Bukkit.getPluginManager().callEvent(new OpenShopEvent(player));
+                });
+    }
+
+    private SGButton getGacha() {
+        ItemStack icon = new ItemBuilder(Material.DIAMOND)
+                .name("가챠(뽑기)")
+                .build();
+        return new SGButton(icon)
+                .withListener(event -> {
+                    Bukkit.getPluginManager().callEvent(new OpenGachaEvent(player));
                 });
     }
 }

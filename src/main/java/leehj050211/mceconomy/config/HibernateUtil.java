@@ -16,9 +16,9 @@ public class HibernateUtil {
     private static final SessionFactory sessionFactory;
 
     static {
-        String url = "jdbc:mysql://localhost:4306/minecraft_economy?autoReconnect=true";
-        String user = "root";
-        String password = "root";
+        String url = "jdbc:mysql://localhost:3306/minecraft_economy?autoReconnect=true";
+        String user = "mine";
+        String password = "mine";
 
         Configuration configuration = new Configuration()
                 .setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver")
