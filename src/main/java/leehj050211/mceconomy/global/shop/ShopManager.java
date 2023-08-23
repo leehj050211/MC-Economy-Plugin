@@ -1,6 +1,5 @@
 package leehj050211.mceconomy.global.shop;
 
-import leehj050211.mceconomy.dao.ShopCategoryDao;
 import leehj050211.mceconomy.dao.ShopItemDao;
 import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.domain.shop.ShopPriceCategory;
@@ -25,19 +24,19 @@ public class ShopManager {
         return instance;
     }
 
-    public ShopManager() {
-        initData();
-    }
-
     private static final HashMap<ShopItemData, ShopPriceCategory> priceCategory = new HashMap<>();
     private static final HashMap<ShopItemCategory, ShopPriceCategory> itemCategoryPrice = new HashMap<>();
     private static final HashMap<Material, ShopItemData> itemDataList = new HashMap<>();
     private static final HashMap<ShopItemCategory, List<ShopItemData>> itemCategoryList = new HashMap<>();
 
-    private final PlayerManager playerManager = PlayerManager.getInstance();
-    private final ShopItemDao shopItemDao = ShopItemDao.getInstance();
+    private static final PlayerManager playerManager = PlayerManager.getInstance();
+    private static final ShopItemDao shopItemDao = ShopItemDao.getInstance();
 
-    private void initData() {
+    static {
+        initData();
+    }
+
+    private static void initData() {
         shopItemDao.findAll().forEach(data -> {
             priceCategory.put(data, data.getPriceCategory());
             itemDataList.put(data.getMaterial(), data);
@@ -70,17 +69,17 @@ public class ShopManager {
         return shopItemList;
     }
 
-    public ShopPriceCategory getPriceCategory(ShopItemCategory category) {
-        return itemCategoryPrice.get(category);
+    public ShopPriceCategory getPriceCategory(ShopItemCategory itemCategory) {
+        return itemCategoryPrice.get(itemCategory);
     }
 
-    public void buyItem(Player player, Material material) {
+    public void buyItem(Player player, Material material, int amount) {
         ShopItemData itemData = itemDataList.get(material);
         ShopPriceCategory priceCategory = itemData.getPriceCategory();
         PlayerData playerData = playerManager.getData(player.getUniqueId());
 
-        playerData.decreaseMoney(itemData.getCurrentPrice());
+        playerData.decreaseMoney(itemData.getCurrentPrice(amount));
         player.sendMessage(MessageUtil.getRemainingMoney(playerData));
-        priceCategory.increaseDemand();
+        priceCategory.increaseDemand(amount);
     }
 }

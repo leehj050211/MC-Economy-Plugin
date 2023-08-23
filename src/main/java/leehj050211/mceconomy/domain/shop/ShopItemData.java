@@ -23,7 +23,7 @@ public class ShopItemData {
     private String id;
 
     @Convert(converter = ShopItemCategoryConverter.class)
-    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
+    @Column(nullable = false, name = "item_category", columnDefinition = "INT UNSIGNED")
     private ShopItemCategory itemCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,12 +41,15 @@ public class ShopItemData {
         return this.price + this.priceCategory.getBasePrice();
     }
 
-    public long getCurrentPrice() {
-        long demand = this.priceCategory.getDemand();
-        long supply = this.priceCategory.getSupply();
-        double demandFactor = Math.pow(1.2, demand);
-        double supplyFactor = 1 - (supply * 0.05);
+    public long getPrice(int amount) {
+        return getPrice() * amount;
+    }
 
-        return Math.round(getPrice() * demandFactor * supplyFactor);
+    public long getCurrentPrice(int amount) {
+        long remainingAmount = priceCategory.getAmount() - amount + 1;
+        if (remainingAmount > 0) {
+            return (long) (getPrice() * (priceCategory.getAvgAmount() / (remainingAmount * 1.0)));
+        }
+        return (long) ((getPrice() * priceCategory.getAvgAmount()) * Math.pow(1.5, Math.max(-remainingAmount + 1, 1)));
     }
 }

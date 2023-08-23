@@ -1,18 +1,18 @@
-package leehj050211.mceconomy.event.job;
+package leehj050211.mceconomy.event.menu;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class OpenJobListEvent extends Event {
+@Getter
+@RequiredArgsConstructor
+public class OpenMenuEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
-    public Player player;
-
-    public OpenJobListEvent(Player player) {
-        this.player = player;
-    }
+    private final Player player;
 
     @Override
     public @NotNull HandlerList getHandlers() {
@@ -22,5 +22,4 @@ public class OpenJobListEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
-
 }

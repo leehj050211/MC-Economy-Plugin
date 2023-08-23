@@ -1,71 +1,62 @@
 package leehj050211.mceconomy.gui.job;
 
-import leehj050211.mceconomy.MCEconomy;
-import leehj050211.mceconomy.constant.MenuConstant;
-import leehj050211.mceconomy.constant.MenuId;
+import com.samjakob.spigui.buttons.SGButton;
+import com.samjakob.spigui.item.ItemBuilder;
+import com.samjakob.spigui.menu.SGMenu;
+import leehj050211.mceconomy.constant.IconConstant;
 import leehj050211.mceconomy.dao.PlayerDao;
 import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.domain.job.type.JobType;
-import leehj050211.mceconomy.event.job.OpenJobListEvent;
+import leehj050211.mceconomy.event.job.OpenJobMenuEvent;
 import leehj050211.mceconomy.global.player.PlayerManager;
+import leehj050211.mceconomy.global.util.CustomHeadUtil;
 import leehj050211.mceconomy.global.util.ItemUtil;
-import leehj050211.mceconomy.gui.CustomGui;
-import leehj050211.mceconomy.gui.ItemMenu;
-import org.bukkit.NamespacedKey;
+import leehj050211.mceconomy.gui.MenuToolbarProvider;
+import leehj050211.mceconomy.gui.ToolbarButton;
+import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
-import java.util.List;
+import static leehj050211.mceconomy.MCEconomy.spiGUI;
 
-public class SelectJobGui extends CustomGui {
+@RequiredArgsConstructor
+public class SelectJobGui {
 
-    private final PlayerManager playerManager = PlayerManager.getInstance();
-    private final PlayerDao playerDao = PlayerDao.getInstance();
+    private static final PlayerManager playerManager = PlayerManager.getInstance();
+    private static final PlayerDao playerDao = PlayerDao.getInstance();
+    private static final int ROWS = 1;
+    private final SGMenu sgMenu = spiGUI.create("메뉴 > 직업 > 직업 선택 (Page {currentPage}/{maxPage})", ROWS);
 
-    private final int pageSize = 3;
+    private final Player player;
 
-    public SelectJobGui() {
-        super(MenuId.SELECT_JOB);
-    }
+    public Inventory getInventory() {
+        sgMenu.setAutomaticPaginationEnabled(true);
 
-    @EventHandler
-    public void onOpenJobList(OpenJobListEvent event) {
-        openPage(event.player, null, 1);
-    }
-
-    @Override
-    protected void openPage(Player player, String subId, int currentPage) {
-        ItemMenu[] itemMenus = new ItemMenu[JobType.values().length];
         for (int i=0; i<JobType.values().length; i++) {
-            itemMenus[i] = new ItemMenu(i, getJobIcon(JobType.values()[i]));
+            sgMenu.setButton(
+                    ItemUtil.getPage(i, ROWS),
+                    ItemUtil.getSlot(i, ROWS),
+                    getJobIcon(JobType.values()[i]));
         }
-
-        openMenu(player, pageSize, currentPage, subId, "직업 선택", itemMenus);
+        ToolbarButton[] buttons = {
+                new ToolbarButton(1, getPrevMenuButton())
+        };
+        sgMenu.setToolbarBuilder(new MenuToolbarProvider(2, 3, buttons));
+        return sgMenu.getInventory();
     }
 
-    private static ItemStack getJobIcon(JobType jobType) {
-        ItemStack icon = new ItemStack(jobType.getIcon(), 1);
-        ItemMeta meta = icon.getItemMeta();
-
-        ItemUtil.setItemData(meta, MenuConstant.SELECT_JOB_KEY, PersistentDataType.STRING, jobType.name());
-        meta.setDisplayName(jobType.getName());
-        meta.setLore(List.of(jobType.getDescription()));
-        icon.setItemMeta(meta);
-        return icon;
+    private SGButton getJobIcon(JobType jobType) {
+        ItemStack icon = new ItemBuilder(jobType.getIcon())
+                .name(jobType.getName())
+                .lore(jobType.getDescription())
+                .build();
+        return new SGButton(icon)
+                .withListener(event -> selectJob(jobType));
     }
 
-    @Override
-    protected void onClick(InventoryClickEvent event, Player player,
-                           ItemStack item, String subId, int currentPage) {
-        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(MCEconomy.getInstance(), MenuConstant.SELECT_JOB_KEY);
-
-        JobType jobType = JobType.valueOf(data.get(key, PersistentDataType.STRING));
+    private void selectJob(JobType jobType) {
         PlayerData playerData = playerManager.getData(player.getUniqueId());
         playerData.updateJob(jobType);
         playerDao.update(playerData);
@@ -74,4 +65,12 @@ public class SelectJobGui extends CustomGui {
         player.closeInventory();
     }
 
+    private SGButton getPrevMenuButton() {
+        return new SGButton(new ItemBuilder(CustomHeadUtil.getHead(IconConstant.BACKWARD))
+                .name("&l이전 메뉴")
+                .build()
+        ).withListener(event -> {
+            Bukkit.getPluginManager().callEvent(new OpenJobMenuEvent(player));
+        });
+    }
 }

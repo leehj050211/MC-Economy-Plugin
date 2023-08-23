@@ -1,6 +1,5 @@
-package leehj050211.mceconomy.event.shop;
+package leehj050211.mceconomy.event.job;
 
-import leehj050211.mceconomy.domain.shop.type.ShopItemCategory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
@@ -10,11 +9,10 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 @RequiredArgsConstructor
-public class SelectShopItemCategoryEvent extends Event {
+public class OpenSelectJobEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
-    private final ShopItemCategory itemCategory;
 
     @Override
     public @NotNull HandlerList getHandlers() {

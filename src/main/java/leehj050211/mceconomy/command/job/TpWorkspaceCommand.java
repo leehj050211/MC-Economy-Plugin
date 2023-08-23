@@ -1,18 +1,17 @@
-package leehj050211.mceconomy.command.shop;
+package leehj050211.mceconomy.command.job;
 
 import leehj050211.mceconomy.command.CustomCommandExecutor;
 import leehj050211.mceconomy.constant.ErrorMsgConstant;
-import leehj050211.mceconomy.event.shop.OpenShopEvent;
-import org.bukkit.Bukkit;
+import leehj050211.mceconomy.global.world.WorldManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class OpenShopCommand extends CustomCommandExecutor {
+public class TpWorkspaceCommand extends CustomCommandExecutor {
 
     @Override
     public String getName() {
-        return "상점";
+        return "작업장";
     }
 
     @Override
@@ -21,8 +20,7 @@ public class OpenShopCommand extends CustomCommandExecutor {
             sender.sendMessage(ErrorMsgConstant.InvalidCommandExecutor);
             return true;
         }
-        Bukkit.getPluginManager().callEvent(new OpenShopEvent(player));
+        WorldManager.getInstance().tpToWorkspace(player);
         return true;
     }
-
 }

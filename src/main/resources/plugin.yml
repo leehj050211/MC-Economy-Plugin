@@ -3,6 +3,9 @@ version: '${version}'
 main: leehj050211.mceconomy.MCEconomy
 api-version: '1.20'
 commands:
+  메뉴:
+    description: 메뉴를 엽니다.
+    usage: /메뉴
   송금:
     description: 상대방에게 돈을 보낼 수 있습니다.
     usage: /송금 <상대방 닉네임> <금액>
@@ -12,3 +15,6 @@ commands:
   가챠:
     description: 가챠 상점에서 가챠를 돌릴 수 있습니다.
     usage: /가챠
+  작업장:
+    description: 일을 할 수 있는 작업장으로 이동합니다.
+    usage: /작업장

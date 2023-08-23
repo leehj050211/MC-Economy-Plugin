@@ -1,10 +1,13 @@
 package leehj050211.mceconomy;
 
+import com.samjakob.spigui.SpiGUI;
 import leehj050211.mceconomy.command.CommandManager;
 import leehj050211.mceconomy.event.EventManager;
 import leehj050211.mceconomy.global.shop.ShopManager;
 import leehj050211.mceconomy.global.task.SaveDataTask;
 import leehj050211.mceconomy.global.task.StatusWindowTask;
+import leehj050211.mceconomy.global.world.WorldManager;
+import leehj050211.mceconomy.gui.MenuToolbarProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MCEconomy extends JavaPlugin {
@@ -15,10 +18,15 @@ public class MCEconomy extends JavaPlugin {
         return instance;
     }
 
+    public static SpiGUI spiGUI;
+
     @Override
     public void onEnable() {
         instance = this;
+        spiGUI = new SpiGUI(this);
+        spiGUI.setDefaultToolbarBuilder(new MenuToolbarProvider());
         ShopManager.getInstance();
+        WorldManager.getInstance();
 
         EventManager.registerEvents();
         CommandManager.registerCommands();
