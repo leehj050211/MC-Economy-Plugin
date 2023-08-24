@@ -9,6 +9,8 @@ import leehj050211.mceconomy.event.player.listener.PlayerJoinListener;
 import leehj050211.mceconomy.event.player.listener.PlayerKickListener;
 import leehj050211.mceconomy.event.player.listener.PlayerQuitListener;
 import leehj050211.mceconomy.event.shop.listener.OpenShopListener;
+import leehj050211.mceconomy.event.shop.listener.OpenShopMaterialInfoListener;
+import leehj050211.mceconomy.event.shop.listener.OpenWholeSaleListener;
 import leehj050211.mceconomy.event.shop.listener.SelectShopCategoryListener;
 import leehj050211.mceconomy.event.shop.listener.SelectShopItemCategoryListener;
 import org.bukkit.event.Listener;
@@ -33,6 +35,8 @@ public class EventManager {
                 new OpenShopListener(),
                 new SelectShopCategoryListener(),
                 new SelectShopItemCategoryListener(),
+                new OpenShopMaterialInfoListener(),
+                new OpenWholeSaleListener(),
                 new OpenGachaListener()
         };
 

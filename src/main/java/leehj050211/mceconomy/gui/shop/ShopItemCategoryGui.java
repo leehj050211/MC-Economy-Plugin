@@ -10,18 +10,16 @@ import leehj050211.mceconomy.event.shop.OpenShopEvent;
 import leehj050211.mceconomy.event.shop.SelectShopItemCategoryEvent;
 import leehj050211.mceconomy.global.util.CustomHeadUtil;
 import leehj050211.mceconomy.global.util.ItemUtil;
+import leehj050211.mceconomy.gui.MenuProvider;
 import leehj050211.mceconomy.gui.MenuToolbarProvider;
 import leehj050211.mceconomy.gui.ToolbarButton;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-
-import static leehj050211.mceconomy.MCEconomy.spiGUI;
 
 @RequiredArgsConstructor
 public class ShopItemCategoryGui {
@@ -33,7 +31,7 @@ public class ShopItemCategoryGui {
     private final ShopCategory category;
 
     public Inventory getInventory() {
-        sgMenu = spiGUI.create(getMenuDepthTitle() + " ({currentPage}/{maxPage})", ROWS);
+        sgMenu = MenuProvider.pageableMenuGui().create(getMenuDepthTitle() + " ({currentPage}/{maxPage})", ROWS);
         sgMenu.setAutomaticPaginationEnabled(true);
 
         List<ShopItemCategory> filteredCategories = ShopItemCategory.getItemCategories(category);

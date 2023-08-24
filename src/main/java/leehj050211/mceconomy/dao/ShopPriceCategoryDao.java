@@ -11,23 +11,23 @@ import org.hibernate.Transaction;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ShopCategoryDao {
+public class ShopPriceCategoryDao {
 
-    private static ShopCategoryDao instance;
-    public static ShopCategoryDao getInstance() {
+    private static ShopPriceCategoryDao instance;
+    public static ShopPriceCategoryDao getInstance() {
         if (instance == null) {
-            instance = new ShopCategoryDao();
+            instance = new ShopPriceCategoryDao();
         }
         return instance;
     }
 
     private final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
-    public void updateAll(List<ShopPriceCategory> categoryDataList) {
+    public void updateAll(List<ShopPriceCategory> priceCategoryList) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        for (ShopPriceCategory categoryData : categoryDataList) {
-            session.merge(categoryData);
+        for (ShopPriceCategory priceCategory : priceCategoryList) {
+            session.merge(priceCategory);
         }
         transaction.commit();
         session.close();
@@ -35,10 +35,10 @@ public class ShopCategoryDao {
 
     public List<ShopPriceCategory> findAll() {
         Session session = sessionFactory.openSession();
-        List<ShopPriceCategory> categoryDataList = session
-                .createQuery("FROM ShopCategoryData", ShopPriceCategory.class)
+        List<ShopPriceCategory> priceCategoryList = session
+                .createQuery("FROM ShopPriceCategory", ShopPriceCategory.class)
                 .list();
         session.close();
-        return categoryDataList;
+        return priceCategoryList;
     }
 }

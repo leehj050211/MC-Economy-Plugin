@@ -41,15 +41,4 @@ public class ShopItemData {
         return this.price + this.priceCategory.getBasePrice();
     }
 
-    public long getPrice(int amount) {
-        return getPrice() * amount;
-    }
-
-    public long getCurrentPrice(int amount) {
-        long remainingAmount = priceCategory.getAmount() - amount + 1;
-        if (remainingAmount > 0) {
-            return (long) (getPrice() * (priceCategory.getAvgAmount() / (remainingAmount * 1.0)));
-        }
-        return (long) ((getPrice() * priceCategory.getAvgAmount()) * Math.pow(1.5, Math.max(-remainingAmount + 1, 1)));
-    }
 }

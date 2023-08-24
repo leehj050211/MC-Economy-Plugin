@@ -16,6 +16,7 @@ import leehj050211.mceconomy.global.player.PlayerManager;
 import leehj050211.mceconomy.global.util.CustomHeadUtil;
 import leehj050211.mceconomy.global.util.Formatter;
 import leehj050211.mceconomy.global.util.ItemUtil;
+import leehj050211.mceconomy.gui.MenuProvider;
 import leehj050211.mceconomy.gui.MenuToolbarProvider;
 import leehj050211.mceconomy.gui.ToolbarButton;
 import leehj050211.mceconomy.global.util.CountDownTimer;
@@ -26,15 +27,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import static leehj050211.mceconomy.MCEconomy.spiGUI;
-
 @RequiredArgsConstructor
 public class GachaGui {
 
     private final PlayerManager playerManager = PlayerManager.getInstance();
 
     private static final int ROWS = 1;
-    private final SGMenu sgMenu = spiGUI.create("메뉴 > 가챠(뽑기) ({currentPage}/{maxPage})", ROWS);
+    private final SGMenu sgMenu = MenuProvider.pageableMenuGui().create("메뉴 > 가챠(뽑기) ({currentPage}/{maxPage})", ROWS);
     private final Player player;
 
     public Inventory getInventory() {
@@ -89,7 +88,7 @@ public class GachaGui {
 
                 String gachaMessage;
                 if (gachaItem.getProbability() <= 0.1) {
-                    gachaMessage = String.format("%s%s님이 %d%의 확률을 뚫고 %s을(를) 획득했습니다!",
+                    gachaMessage = String.format("%s%s님이 %f%%의 확률을 뚫고 %s을(를) 획득했습니다!",
                             ChatColor.DARK_AQUA,
                             playerData.getNickname(),
                             gachaItem.getProbability() * 100,

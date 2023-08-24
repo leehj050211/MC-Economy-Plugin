@@ -8,6 +8,7 @@ import leehj050211.mceconomy.event.job.OpenSelectJobEvent;
 import leehj050211.mceconomy.event.menu.OpenMenuEvent;
 import leehj050211.mceconomy.global.util.CustomHeadUtil;
 import leehj050211.mceconomy.global.world.WorldManager;
+import leehj050211.mceconomy.gui.MenuProvider;
 import leehj050211.mceconomy.gui.MenuToolbarProvider;
 import leehj050211.mceconomy.gui.ToolbarButton;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +18,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import static leehj050211.mceconomy.MCEconomy.spiGUI;
-
 @RequiredArgsConstructor
 public class JobMenuGui {
 
     private static final int ROWS = 3;
-    private final SGMenu sgMenu = spiGUI.create("메뉴 > 직업", ROWS);
+    private final SGMenu sgMenu = MenuProvider.pageableMenuGui().create("메뉴 > 직업", ROWS);
 
     private final Player player;
 
