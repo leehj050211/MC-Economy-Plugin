@@ -10,32 +10,32 @@ public class ShopUtil {
     public long getNormalPrice(ShopItemData itemData, int amount) {
         ShopPriceCategory priceCategory = itemData.getPriceCategory();
         long remainingAmount = priceCategory.getAvgAmount() - amount + 1;
-        return calcPrice(itemData, remainingAmount);
+        return calcPrice(itemData, remainingAmount, amount);
     }
 
     public long getCurrentPrice(ShopItemData itemData, int amount) {
         ShopPriceCategory priceCategory = itemData.getPriceCategory();
         long remainingAmount = priceCategory.getAmount() - amount + 1;
-        return calcPrice(itemData, remainingAmount);
+        return calcPrice(itemData, remainingAmount, amount);
     }
 
     public long getNormalSellPrice(ShopItemData itemData, int amount) {
         ShopPriceCategory priceCategory = itemData.getPriceCategory();
         long remainingAmount = priceCategory.getAvgAmount() + amount - 1;
-        return calcPrice(itemData, remainingAmount);
+        return calcPrice(itemData, remainingAmount, amount);
     }
 
     public long getCurrentSellPrice(ShopItemData itemData, int amount) {
         ShopPriceCategory priceCategory = itemData.getPriceCategory();
         long remainingAmount = priceCategory.getAmount() + amount - 1;
-        return calcPrice(itemData, remainingAmount);
+        return calcPrice(itemData, remainingAmount, amount);
     }
 
-    private long calcPrice(ShopItemData itemData, long remainingAmount) {
+    private long calcPrice(ShopItemData itemData, long remainingAmount, int amount) {
         ShopPriceCategory priceCategory = itemData.getPriceCategory();
         if (remainingAmount > 0) {
-            return (long) (itemData.getPrice() * (priceCategory.getAvgAmount() / (remainingAmount * 1.0)));
+            return (long) (itemData.getPrice() * (priceCategory.getAvgAmount() / (remainingAmount * 1.0)) * amount);
         }
-        return (long) ((itemData.getPrice() * priceCategory.getAvgAmount()) * Math.pow(1.5, Math.max(-remainingAmount + 1, 1)));
+        return (long) ((itemData.getPrice() * priceCategory.getAvgAmount()) * Math.pow(1.5, Math.max(-remainingAmount + 1, 1)) * amount);
     }
 }

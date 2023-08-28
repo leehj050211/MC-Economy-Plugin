@@ -2,11 +2,14 @@ package leehj050211.mceconomy;
 
 import leehj050211.mceconomy.command.CommandManager;
 import leehj050211.mceconomy.event.EventManager;
+import leehj050211.mceconomy.global.player.PlayerManager;
 import leehj050211.mceconomy.global.shop.ShopManager;
 import leehj050211.mceconomy.global.task.SaveDataTask;
 import leehj050211.mceconomy.global.task.StatusWindowTask;
 import leehj050211.mceconomy.global.world.WorldManager;
 import leehj050211.mceconomy.gui.MenuProvider;
+import mc.obliviate.inventory.InventoryAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MCEconomy extends JavaPlugin {
@@ -17,11 +20,15 @@ public class MCEconomy extends JavaPlugin {
         return instance;
     }
 
-
+    private final PlayerManager playerManager = PlayerManager.getInstance();
 
     @Override
     public void onEnable() {
         instance = this;
+
+        Bukkit.getOnlinePlayers().forEach(playerManager::addPlayer);
+
+        new InventoryAPI(this).init();
         MenuProvider.getInstance();
         ShopManager.getInstance();
         WorldManager.getInstance();

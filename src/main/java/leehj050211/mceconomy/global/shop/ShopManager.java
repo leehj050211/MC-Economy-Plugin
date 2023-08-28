@@ -12,6 +12,7 @@ import leehj050211.mceconomy.global.util.MessageUtil;
 import leehj050211.mceconomy.global.util.ShopUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,6 +76,10 @@ public class ShopManager {
         return itemCategoryPrice.get(itemCategory);
     }
 
+    public boolean hasItem(Material material) {
+        return itemDataList.containsKey(material);
+    }
+
     public void buyItem(Player player, Material material, int amount) {
         ShopItemData itemData = itemDataList.get(material);
         ShopPriceCategory priceCategory = itemData.getPriceCategory();
@@ -85,17 +90,24 @@ public class ShopManager {
         priceCategory.increaseDemand(amount);
     }
 
-    public void sellItem(Player player, Material material, int amount) {
+    public void sellItems(Player player, List<ItemStack> itemStacks) {
+        PlayerData playerData = playerManager.getData(player.getUniqueId());
+        itemStacks.forEach(item -> {
+            sellItem(playerData, item.getType(), item.getAmount());
+        });
+        player.sendMessage(MessageUtil.getRemainingMoney(playerData));
+    }
+
+    private void sellItem(PlayerData playerData, Material material, int amount) {
         ShopItemData itemData = itemDataList.get(material);
         ShopPriceCategory priceCategory = itemData.getPriceCategory();
-        PlayerData playerData = playerManager.getData(player.getUniqueId());
 
-        playerData.increaseMoney(ShopUtil.getCurrentPrice(itemData, amount));
+        playerData.increaseMoney(calcSellItem(material, amount));
         priceCategory.increaseSupply(amount);
     }
 
     public long calcSellItem(Material material, int amount) {
         ShopItemData itemData = itemDataList.get(material);
-        return (long) (ShopUtil.getCurrentPrice(itemData, amount) * (1 - ShopConstant.TAX));
+        return (long) (ShopUtil.getCurrentSellPrice(itemData, amount) * (1 - ShopConstant.TAX));
     }
 }
