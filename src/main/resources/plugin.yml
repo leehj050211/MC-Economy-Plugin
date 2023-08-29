@@ -18,3 +18,6 @@ commands:
   작업장:
     description: 일을 할 수 있는 작업장으로 이동합니다.
     usage: /작업장
+  부동산위치:
+    description: 현재 위치를 기준으로 구매할 부동산의 범위를 정합니다.
+    usage: /부동산위치 <1 또는 2>

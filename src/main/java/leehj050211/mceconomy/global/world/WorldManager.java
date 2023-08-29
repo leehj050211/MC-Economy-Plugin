@@ -5,6 +5,7 @@ import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.global.exception.GeneralMCPlayerException;
 import leehj050211.mceconomy.global.player.PlayerManager;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -13,8 +14,6 @@ import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class WorldManager {
@@ -28,6 +27,9 @@ public class WorldManager {
     }
 
     private final PlayerManager playerManager = PlayerManager.getInstance();
+
+    @Getter
+    private final World mainWorld = Bukkit.getWorld("world");
 
     static {
         initWorkspaceWorlds();

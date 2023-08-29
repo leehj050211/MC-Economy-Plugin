@@ -1,6 +1,7 @@
 package leehj050211.mceconomy.command;
 
 import leehj050211.mceconomy.MCEconomy;
+import leehj050211.mceconomy.command.estate.SetEstatePointCommand;
 import leehj050211.mceconomy.command.gacha.GachaCommand;
 import leehj050211.mceconomy.command.job.TpWorkspaceCommand;
 import leehj050211.mceconomy.command.menu.OpenMenuCommand;
@@ -25,6 +26,7 @@ public class CommandManager {
                 new GachaCommand(),
                 new OpenShopCommand(),
                 new TpWorkspaceCommand(),
+                new SetEstatePointCommand()
         };
 
         for (CustomCommandExecutor executor : executors) {
