@@ -26,6 +26,6 @@ public enum JobType {
     }
 
     public String getWorkspaceWorldName() {
-        return "world_workspace_" + this.name().toLowerCase();
+        return "world_minecraft_workspace_" + this.name().toLowerCase();
     }
 }

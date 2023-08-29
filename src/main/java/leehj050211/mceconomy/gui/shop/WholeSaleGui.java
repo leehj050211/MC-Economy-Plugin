@@ -91,7 +91,7 @@ public class WholeSaleGui extends Gui {
             Inventory inventory = getInventory();
             shopManager.sellItems(player, itemStacks);
             itemStackMap.clear();
-            itemStacks.clear();
+            updateItemStacks();
             IntStream.range(0, ROWS * 9).forEach(inventory::clear);
         });
         return icon;

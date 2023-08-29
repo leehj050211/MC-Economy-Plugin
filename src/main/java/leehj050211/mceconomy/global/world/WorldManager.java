@@ -28,7 +28,6 @@ public class WorldManager {
     }
 
     private final PlayerManager playerManager = PlayerManager.getInstance();
-    private static final Map<String, World> worlds = new HashMap<>();
 
     static {
         initWorkspaceWorlds();
@@ -37,14 +36,13 @@ public class WorldManager {
     private static void initWorkspaceWorlds() {
         Arrays.stream(JobType.values())
                 .filter(jobType -> {
-                    World world = Bukkit.getWorld(jobType.name());
+                    World world = Bukkit.getWorld(jobType.getWorkspaceWorldName());
                     return jobType.hasWorkspace() && world == null;
                 })
                 .forEach(jobType -> {
                     WorldCreator worldCreator = new WorldCreator(jobType.getWorkspaceWorldName());
                     worldCreator.type(WorldType.FLAT);
-                    World world = worldCreator.createWorld();
-                    worlds.put(jobType.getWorkspaceWorldName(), world);
+                    worldCreator.createWorld();
                 });
     }
 
@@ -54,7 +52,7 @@ public class WorldManager {
         if(!jobType.hasWorkspace()) {
             new GeneralMCPlayerException(playerData.getUuid(), "해당 직업은 별도의 작업장이 없습니다.");
         }
-        World workspace = worlds.get(jobType.getWorkspaceWorldName());
+        World workspace = Bukkit.getWorld(jobType.getWorkspaceWorldName());
         player.teleport(workspace.getSpawnLocation());
     }
 }
