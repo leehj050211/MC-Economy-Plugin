@@ -3,8 +3,15 @@ package leehj050211.mceconomy.global.estate;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.domains.DefaultDomain;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StringFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import leehj050211.mceconomy.global.exception.GeneralMCPlayerException;
 import leehj050211.mceconomy.global.world.WorldManager;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -23,6 +30,8 @@ public class EstateManager {
         return instance;
     }
 
+    private final StringFlag nameDisplayFlag = new StringFlag("bluemap-display");
+    private final StateFlag extrudeFlag = new StateFlag("bluemap-extrude", false);
     private final RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
     private RegionManager regions = container.get(new BukkitWorld(WorldManager.getInstance().getMainWorld()));
 
@@ -44,4 +53,22 @@ public class EstateManager {
         player.sendMessage(String.format("좌표 2 설정됨 (X:%d, Z:%d)", point2.getBlockX(), point2.getBlockZ()));
     }
 
+    public void buyEstate(Player player) {
+        EstatePointWrapper points = playerPointMap.get(player);
+        if (points == null
+                || points.getPoint1() == null
+                || points.getPoint2() == null) {
+            throw new GeneralMCPlayerException(player.getUniqueId(), "구매할 부동산의 좌표를 모두 설정해야합니다.");
+        }
+        ProtectedRegion estate = new ProtectedCuboidRegion("estate_" + player.getUniqueId(), points.getPoint1(), points.getPoint2());
+        estate.setFlag(nameDisplayFlag, player.getName() + "의 사유지");
+        estate.setFlag(extrudeFlag, StateFlag.State.DENY);
+        estate.setFlag(Flags.PASSTHROUGH, StateFlag.State.DENY);
+        estate.setFlag(Flags.ENTRY, StateFlag.State.DENY);
+
+        DefaultDomain owners = estate.getOwners();
+        owners.addPlayer(player.getUniqueId());
+
+        regions.addRegion(estate);
+    }
 }
