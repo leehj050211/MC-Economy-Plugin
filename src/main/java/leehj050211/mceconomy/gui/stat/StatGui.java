@@ -1,4 +1,4 @@
-package leehj050211.mceconomy.gui.main;
+package leehj050211.mceconomy.gui.stat;
 
 import com.samjakob.spigui.buttons.SGButton;
 import com.samjakob.spigui.item.ItemBuilder;
@@ -13,72 +13,68 @@ import leehj050211.mceconomy.gui.MenuProvider;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 @RequiredArgsConstructor
-public class MainMenuGui {
+public class StatGui {
 
     private static final int ROWS = 5;
-    private final SGMenu sgMenu = MenuProvider.menuGui().create("메뉴", ROWS);
+    private final SGMenu sgMenu = MenuProvider.menuGui().create("메뉴 > 스탯", ROWS);
 
     private final Player player;
 
     public Inventory getInventory() {
-        sgMenu.setButton(11, getProfileMenu());
-        sgMenu.setButton(13, getStat());
-        sgMenu.setButton(15, getJobMenu());
-        sgMenu.setButton(30, getShop());
-        sgMenu.setButton(32, getGacha());
+        sgMenu.setButton(10, getHp());
+        sgMenu.setButton(12, getDef());
+        sgMenu.setButton(14, getAtk());
+        sgMenu.setButton(16, getSpeed());
         return sgMenu.getInventory();
     }
 
-    private SGButton getProfileMenu() {
-        ItemStack icon = new ItemBuilder(CustomHeadUtil.getHead(player))
-                .name("프로필")
-                .build();
-        return new SGButton(icon)
-                .withListener(event -> {});
-    }
-
-    private SGButton getStat() {
+    private SGButton getHp() {
         ItemStack icon = new ItemBuilder(CustomHeadUtil.getHead(IconConstant.HEART))
-                .name("스탯")
+                .name("체력")
+                .lore("클릭해서 레벨 업")
                 .build();
         return new SGButton(icon)
                 .withListener(event -> {
-                    Bukkit.getPluginManager().callEvent(new OpenStatEvent(player));
+                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(30);
                 });
     }
 
-    private SGButton getJobMenu() {
-        ItemStack icon = new ItemBuilder(Material.DIAMOND_PICKAXE)
-                .name("직업")
+    private SGButton getDef() {
+        ItemStack icon = new ItemBuilder(Material.SHIELD)
+                .name("방어력")
+                .lore("클릭해서 레벨 업")
                 .build();
         return new SGButton(icon)
                 .withListener(event -> {
-                    Bukkit.getPluginManager().callEvent(new OpenJobMenuEvent(player));
+                    player.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(10);
                 });
     }
 
-    private SGButton getShop() {
-        ItemStack icon = new ItemBuilder(CustomHeadUtil.getHead(IconConstant.SHOP))
-                .name("상점")
+    private SGButton getAtk() {
+        ItemStack icon = new ItemBuilder(Material.DIAMOND_SWORD)
+                .name("공격력")
+                .lore("클릭해서 레벨 업")
                 .build();
         return new SGButton(icon)
                 .withListener(event -> {
-                    Bukkit.getPluginManager().callEvent(new OpenShopEvent(player));
+                    player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(2);
                 });
     }
 
-    private SGButton getGacha() {
-        ItemStack icon = new ItemBuilder(Material.DIAMOND)
-                .name("가챠(뽑기)")
+    private SGButton getSpeed() {
+        ItemStack icon = new ItemBuilder(Material.DIAMOND_BOOTS)
+                .name("스피드")
+                .lore("클릭해서 레벨 업")
                 .build();
         return new SGButton(icon)
                 .withListener(event -> {
-                    Bukkit.getPluginManager().callEvent(new OpenGachaEvent(player));
+                    player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.2);
                 });
     }
 }

@@ -15,4 +15,6 @@ public class IconConstant {
     public static final String WRONG_MARK = "27548362a24c0fa8453e4d93e68c5969ddbde57bf6666c0319c1ed1e84d89065";
 
     public static final String SHOP = "34ccb52750e97e830aebfa8a21d5da0d364d0fdad9fb0cc220fe2ca8411842c3";
+
+    public static final String HEART = "2869bdd9a8f77eeff75d8f67ed0322bd9c16dd494972314ed707dd10a3139a58";
 }

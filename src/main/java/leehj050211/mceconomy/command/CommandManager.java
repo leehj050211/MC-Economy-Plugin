@@ -8,6 +8,7 @@ import leehj050211.mceconomy.command.job.TpWorkspaceCommand;
 import leehj050211.mceconomy.command.menu.OpenMenuCommand;
 import leehj050211.mceconomy.command.money.SendMoneyCommand;
 import leehj050211.mceconomy.command.shop.OpenShopCommand;
+import leehj050211.mceconomy.command.stat.OpenStatCommand;
 import leehj050211.mceconomy.global.exception.CommandExceptionHandler;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
@@ -28,7 +29,8 @@ public class CommandManager {
                 new OpenShopCommand(),
                 new TpWorkspaceCommand(),
                 new SetEstatePointCommand(),
-                new BuyEstateCommand()
+                new BuyEstateCommand(),
+                new OpenStatCommand()
         };
 
         for (CustomCommandExecutor executor : executors) {

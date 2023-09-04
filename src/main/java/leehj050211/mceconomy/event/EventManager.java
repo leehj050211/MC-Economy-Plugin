@@ -13,6 +13,7 @@ import leehj050211.mceconomy.event.shop.listener.OpenShopMaterialInfoListener;
 import leehj050211.mceconomy.event.shop.listener.OpenWholeSaleListener;
 import leehj050211.mceconomy.event.shop.listener.SelectShopCategoryListener;
 import leehj050211.mceconomy.event.shop.listener.SelectShopItemCategoryListener;
+import leehj050211.mceconomy.event.stat.listener.OpenStatListener;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -37,7 +38,8 @@ public class EventManager {
                 new SelectShopItemCategoryListener(),
                 new OpenShopMaterialInfoListener(),
                 new OpenWholeSaleListener(),
-                new OpenGachaListener()
+                new OpenGachaListener(),
+                new OpenStatListener()
         };
 
         for (Listener listener : listeners) {
