@@ -3,9 +3,11 @@ package leehj050211.mceconomy.command.estate;
 import leehj050211.mceconomy.command.CustomCommandExecutor;
 import leehj050211.mceconomy.constant.ErrorMsgConstant;
 import leehj050211.mceconomy.global.estate.EstateManager;
+import leehj050211.mceconomy.gui.estate.PurchaseEstateGui;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 public class BuyEstateCommand extends CustomCommandExecutor {
 
@@ -22,7 +24,9 @@ public class BuyEstateCommand extends CustomCommandExecutor {
             sender.sendMessage(ErrorMsgConstant.InvalidCommandExecutor);
             return true;
         }
-        estateManager.buyEstate(player);
+        Inventory menu = new PurchaseEstateGui(player)
+                .getInventory();
+        player.openInventory(menu);
         return true;
     }
 
