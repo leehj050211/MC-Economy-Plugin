@@ -33,12 +33,28 @@ public class PlayerData {
     @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private JobType job;
 
+    @Column(nullable = false, name = "health_level")
+    private Short healthLevel;
+
+    @Column(nullable = false, name = "armor_level")
+    private Short armorLevel;
+
+    @Column(nullable = false, name = "attack_level")
+    private Short attackLevel;
+
+    @Column(nullable = false, name = "speedLevel")
+    private Short speedLevel;
+
     public static PlayerData create(UUID uuid, String nickname) {
         PlayerData playerData = new PlayerData();
         playerData.uuid = uuid;
         playerData.nickname = nickname;
         playerData.money = 1000L;
         playerData.job = JobType.JOBLESS;
+        playerData.healthLevel = 1;
+        playerData.armorLevel = 1;
+        playerData.attackLevel = 1;
+        playerData.speedLevel = 1;
         return playerData;
     }
 
@@ -46,23 +62,45 @@ public class PlayerData {
         this.job = job;
     }
 
-    public void increaseMoney(Long money) throws GeneralMCPlayerException {
+    public void increaseMoney(long money) {
         if (money < 0) {
             throw new InvalidMoneyException(this.uuid);
         }
         this.money += money;
     }
 
-    public void decreaseMoney(Long money) throws GeneralMCPlayerException {
+    public void increaseMoney(double money) {
+        increaseMoney((long) money);
+    }
+
+    public void decreaseMoney(long money) {
         if (money < 0) {
             throw new InvalidMoneyException(this.uuid);
         }
-
         if (this.money < money) {
             throw new NotEnoughMoneyException(this.uuid, money - this.money);
         }
-
         this.money -= money;
+    }
+
+    public void decreaseMoney(double money) {
+        decreaseMoney((long) money);
+    }
+
+    public void levelUpHealth() {
+        this.healthLevel++;
+    }
+
+    public void levelUpArmor() {
+        this.armorLevel++;
+    }
+
+    public void levelUpAttack() {
+        this.attackLevel++;
+    }
+
+    public void levelUpSpeed() {
+        this.speedLevel++;
     }
 
 }

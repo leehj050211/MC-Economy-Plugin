@@ -28,6 +28,12 @@ public class MenuToolbarProvider implements SGToolbarBuilder {
         this.toolbarButtons = toolbarButtons;
     }
 
+    public MenuToolbarProvider(ToolbarButton[] toolbarButtons) {
+        this.prevButtonSlot = -1;
+        this.nextButtonSlot = -1;
+        this.toolbarButtons = toolbarButtons;
+    }
+
     public static SGButton getPrevButton(SGMenu menu) {
         return new SGButton(new ItemBuilder(CustomHeadUtil.getHead(IconConstant.LEFT_ARROW))
                 .name("&a&l← 이전 페이지")

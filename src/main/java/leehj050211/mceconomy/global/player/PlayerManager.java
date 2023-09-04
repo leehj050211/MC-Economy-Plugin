@@ -2,6 +2,7 @@ package leehj050211.mceconomy.global.player;
 
 import leehj050211.mceconomy.dao.PlayerDao;
 import leehj050211.mceconomy.domain.player.PlayerData;
+import leehj050211.mceconomy.global.util.StatUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.entity.Player;
@@ -33,6 +34,8 @@ public class PlayerManager {
         PlayerWrapper playerWrapper = new PlayerWrapper(player.getUniqueId(), player, playerData);
         onlinePlayer.put(player.getUniqueId(), playerWrapper);
         onlinePlayerNickname.put(player.getName(), playerWrapper);
+
+        StatUtil.applyStat(player, playerData);
     }
 
     private PlayerData signupPlayer(Player player) {
