@@ -4,6 +4,7 @@ import leehj050211.mceconomy.command.CommandManager;
 import leehj050211.mceconomy.event.EventManager;
 import leehj050211.mceconomy.global.player.PlayerManager;
 import leehj050211.mceconomy.global.shop.ShopManager;
+import leehj050211.mceconomy.global.task.DisplayEstateTask;
 import leehj050211.mceconomy.global.task.SaveDataTask;
 import leehj050211.mceconomy.global.task.StatusWindowTask;
 import leehj050211.mceconomy.global.world.WorldManager;
@@ -38,6 +39,7 @@ public class MCEconomy extends JavaPlugin {
 
         SaveDataTask.getInstance().start();
         StatusWindowTask.getInstance().start();
+        DisplayEstateTask.getInstance().start();
     }
 
     @Override
@@ -45,5 +47,6 @@ public class MCEconomy extends JavaPlugin {
         SaveDataTask.getInstance().stop();
         SaveDataTask.getInstance().execute();
         StatusWindowTask.getInstance().stop();
+        DisplayEstateTask.getInstance().stop();
     }
 }

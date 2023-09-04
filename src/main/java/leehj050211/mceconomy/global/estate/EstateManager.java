@@ -20,6 +20,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -37,11 +38,13 @@ public class EstateManager {
     private final StringFlag nameDisplayFlag = new StringFlag("bluemap-display");
     private final StateFlag extrudeFlag = new StateFlag("bluemap-extrude", false);
     private final RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-    private final RegionManager regions = container.get(new BukkitWorld(WorldManager.getInstance().getMainWorld()));
+
+    private final RegionManager regionManager = container.get(new BukkitWorld(WorldManager.getInstance().getMainWorld()));
 
     private static final HashMap<Player, EstatePointWrapper> playerPointMap = new HashMap<>();
 
     private final PlayerManager playerManager = PlayerManager.getInstance();
+
 
     public void setPoint(Player player, BlockVector3 point1, BlockVector3 point2) {
         EstatePointWrapper points = playerPointMap.get(player);
@@ -89,6 +92,10 @@ public class EstateManager {
         DefaultDomain owners = estate.getOwners();
         owners.addPlayer(player.getUniqueId());
 
-        regions.addRegion(estate);
+        regionManager.addRegion(estate);
+    }
+
+    public Collection<ProtectedRegion> getRegions() {
+        return regionManager.getRegions().values();
     }
 }
