@@ -41,17 +41,16 @@ public class EstateUtil {
         double maxY = Math.max(minPoint.getY(), maxPoint.getY());
         double maxZ = Math.max(minPoint.getZ(), maxPoint.getZ());
 
-        for (double y = minY; y <= maxY; y += 2) {
-            for (double x = minX; x <= maxX; x += 1) {
+        for (double y = minY; y <= maxY; y += 4) {
+            for (double x = minX; x <= maxX + 1; x += 1) {
                 mainWorld.spawnParticle(Particle.FLAME, x, y, minZ, 0, 0, 0, 0, 1);
-                mainWorld.spawnParticle(Particle.FLAME, x, y, maxZ, 0, 0, 0, 0, 1);
+                mainWorld.spawnParticle(Particle.FLAME, x, y, maxZ + 1, 0, 0, 0, 0, 1);
             }
-            for (double z = minZ + 1; z < maxZ; z += 1) {
+            for (double z = minZ + 1; z <= maxZ + 1; z += 1) {
                 mainWorld.spawnParticle(Particle.FLAME, minX, y, z, 0, 0, 0, 0, 1);
-                mainWorld.spawnParticle(Particle.FLAME, maxX, y, z, 0, 0, 0, 0, 1);
+                mainWorld.spawnParticle(Particle.FLAME, maxX + 1, y, z, 0, 0, 0, 0, 1);
             }
         }
     }
-
 
 }

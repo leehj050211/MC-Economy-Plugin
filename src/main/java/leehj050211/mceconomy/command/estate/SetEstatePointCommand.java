@@ -1,6 +1,5 @@
 package leehj050211.mceconomy.command.estate;
 
-import com.sk89q.worldedit.math.BlockVector3;
 import leehj050211.mceconomy.command.CustomCommandExecutor;
 import leehj050211.mceconomy.constant.ErrorMsgConstant;
 import leehj050211.mceconomy.global.estate.EstateManager;
@@ -25,15 +24,14 @@ public class SetEstatePointCommand extends CustomCommandExecutor {
             return true;
         }
         Location location = player.getLocation();
-        BlockVector3 newPoint = BlockVector3.at(location.getX(), location.getY(), location.getZ());
         int step = Integer.parseInt(args[0]);
         switch (step) {
             case 1 -> {
-                estateManager.setPoint(player, newPoint, null);
+                estateManager.setPoint(player, location, null);
                 return true;
             }
             case 2 -> {
-                estateManager.setPoint(player, null, newPoint);
+                estateManager.setPoint(player, null, location);
                 return true;
             }
             default -> {

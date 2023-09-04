@@ -18,6 +18,8 @@ import leehj050211.mceconomy.global.util.EstateUtil;
 import leehj050211.mceconomy.global.world.WorldManager;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -39,27 +41,30 @@ public class EstateManager {
     private final StateFlag extrudeFlag = new StateFlag("bluemap-extrude", false);
     private final RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
 
-    private final RegionManager regionManager = container.get(new BukkitWorld(WorldManager.getInstance().getMainWorld()));
+    private final World mainWorld = WorldManager.getInstance().getMainWorld();
+    private final RegionManager regionManager = container.get(new BukkitWorld(mainWorld));
 
     private static final HashMap<Player, EstatePointWrapper> playerPointMap = new HashMap<>();
 
     private final PlayerManager playerManager = PlayerManager.getInstance();
 
 
-    public void setPoint(Player player, BlockVector3 point1, BlockVector3 point2) {
+    public void setPoint(Player player, Location location1, Location location2) {
         EstatePointWrapper points = playerPointMap.get(player);
         if (points == null) {
             points = new EstatePointWrapper(player);
             playerPointMap.put(player, points);
         }
 
-        if (point1 != null) {
-            points.setPoint1(point1);
-            player.sendMessage(String.format("좌표 1 설정됨 (X:%d, Z:%d)", point1.getBlockX(), point1.getBlockZ()));
+        if (location1 != null) {
+            BlockVector3 point = BlockVector3.at(location1.getX(), mainWorld.getMinHeight(), location1.getZ());
+            points.setPoint1(point);
+            player.sendMessage(String.format("좌표 1 설정됨 (X:%d, Z:%d)", point.getBlockX(), point.getBlockZ()));
             return;
         }
-        points.setPoint2(point2);
-        player.sendMessage(String.format("좌표 2 설정됨 (X:%d, Z:%d)", point2.getBlockX(), point2.getBlockZ()));
+        BlockVector3 point = BlockVector3.at(location2.getX(), mainWorld.getMaxHeight(), location2.getZ());
+        points.setPoint2(point);
+        player.sendMessage(String.format("좌표 2 설정됨 (X:%d, Z:%d)", point.getBlockX(), point.getBlockZ()));
     }
 
     public long getEstateSize(Player player) {

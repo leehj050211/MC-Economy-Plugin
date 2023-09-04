@@ -38,7 +38,7 @@ public class DisplayEstateTask {
 
     public void start() {
         int delay = 0;
-        int period = 40;
+        int period = 30;
         runnable = new BukkitRunnable() {
             @Override
             public void run() {
