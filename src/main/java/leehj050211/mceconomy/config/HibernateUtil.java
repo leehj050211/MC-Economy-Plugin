@@ -1,5 +1,6 @@
 package leehj050211.mceconomy.config;
 
+import leehj050211.mceconomy.domain.job.JobExpData;
 import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.domain.shop.ShopPriceCategory;
 import leehj050211.mceconomy.domain.shop.ShopItemData;
@@ -30,7 +31,8 @@ public class HibernateUtil {
                 .setProperty("hibernate.hbm2ddl.auto", "update")
                 .addAnnotatedClass(PlayerData.class)
                 .addAnnotatedClass(ShopPriceCategory.class)
-                .addAnnotatedClass(ShopItemData.class);
+                .addAnnotatedClass(ShopItemData.class)
+                .addAnnotatedClass(JobExpData.class);
 
         sessionFactory = configuration.buildSessionFactory();
     }

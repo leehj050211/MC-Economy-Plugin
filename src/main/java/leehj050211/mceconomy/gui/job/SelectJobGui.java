@@ -8,6 +8,7 @@ import leehj050211.mceconomy.dao.PlayerDao;
 import leehj050211.mceconomy.domain.player.PlayerData;
 import leehj050211.mceconomy.domain.job.type.JobType;
 import leehj050211.mceconomy.event.job.OpenJobMenuEvent;
+import leehj050211.mceconomy.global.exp.JobExpManager;
 import leehj050211.mceconomy.global.player.PlayerManager;
 import leehj050211.mceconomy.global.util.CustomHeadUtil;
 import leehj050211.mceconomy.global.util.ItemUtil;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 public class SelectJobGui {
 
     private static final PlayerManager playerManager = PlayerManager.getInstance();
+    private static final JobExpManager jobExpManager = JobExpManager.getInstance();
     private static final PlayerDao playerDao = PlayerDao.getInstance();
     private static final int ROWS = 1;
     private final SGMenu sgMenu = MenuProvider.pageableMenuGui().create("메뉴 > 직업 > 직업 선택 (Page {currentPage}/{maxPage})", ROWS);
@@ -60,6 +62,7 @@ public class SelectJobGui {
         playerData.updateJob(jobType);
         playerDao.update(playerData);
 
+        jobExpManager.addJobExp(player, jobType, 0L);
         player.sendMessage(jobType.getName() + " 선택됨");
         player.closeInventory();
     }
