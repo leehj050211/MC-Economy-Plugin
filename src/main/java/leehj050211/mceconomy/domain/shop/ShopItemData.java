@@ -37,8 +37,11 @@ public class ShopItemData {
         return Material.valueOf(this.id);
     }
 
-    public long getPrice() {
+    public long getTotalPrice() {
         return this.price + this.priceCategory.getBasePrice();
     }
 
+    public void setPrice(Long price) {
+        this.price = price;
+    }
 }

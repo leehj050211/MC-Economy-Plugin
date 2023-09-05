@@ -1,7 +1,7 @@
 package leehj050211.mceconomy.event.shop.listener;
 
-import leehj050211.mceconomy.event.shop.OpenShopEvent;
-import leehj050211.mceconomy.gui.shop.ShopGui;
+import leehj050211.mceconomy.event.shop.OpenShopItemManageEvent;
+import leehj050211.mceconomy.gui.shop.ShopItemManageGui;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.event.EventHandler;
@@ -10,12 +10,13 @@ import org.bukkit.inventory.Inventory;
 
 @Getter
 @RequiredArgsConstructor
-public class OpenShopListener implements Listener {
+public class OpenShopItemManageListener implements Listener {
 
     @EventHandler
-    public void onOpenShop(OpenShopEvent event) {
-        Inventory menu = new ShopGui(event.getPlayer(), event.isManageMode())
+    public void onSelectShopCategory(OpenShopItemManageEvent event) {
+        Inventory menu = new ShopItemManageGui(event.getPlayer(), event.getItemData())
                 .getInventory();
         event.getPlayer().openInventory(menu);
     }
+
 }

@@ -21,7 +21,7 @@ public class OpenShopCommand extends CustomCommandExecutor {
             sender.sendMessage(ErrorMsgConstant.InvalidCommandExecutor);
             return true;
         }
-        Bukkit.getPluginManager().callEvent(new OpenShopEvent(player));
+        Bukkit.getPluginManager().callEvent(new OpenShopEvent(player, false));
         return true;
     }
 

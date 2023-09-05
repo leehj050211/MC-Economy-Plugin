@@ -1,5 +1,6 @@
 package leehj050211.mceconomy.event.shop;
 
+import leehj050211.mceconomy.domain.shop.ShopItemData;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
@@ -9,11 +10,11 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 @RequiredArgsConstructor
-public class OpenShopEvent extends Event {
+public class OpenShopItemManageEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
-    private final boolean manageMode;
+    private final ShopItemData itemData;
 
     @Override
     public @NotNull HandlerList getHandlers() {

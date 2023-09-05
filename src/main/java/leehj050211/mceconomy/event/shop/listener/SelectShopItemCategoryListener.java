@@ -14,7 +14,7 @@ public class SelectShopItemCategoryListener implements Listener {
 
     @EventHandler
     public void onSelectShopCategory(SelectShopItemCategoryEvent event) {
-        Inventory menu = new ShopItemGui(event.getPlayer(), event.getItemCategory())
+        Inventory menu = new ShopItemGui(event.getPlayer(), event.getItemCategory(), event.isManageMode())
                 .getInventory();
         event.getPlayer().openInventory(menu);
     }

@@ -14,7 +14,7 @@ public class OpenShopMaterialInfoListener implements Listener {
 
     @EventHandler
     public void onOpenShopMaterialInfo(OpenShopMaterialInfoEvent event) {
-        Inventory menu = new ShopMaterialInfoGui(event.getPlayer())
+        Inventory menu = new ShopMaterialInfoGui(event.getPlayer(), event.isManageMode())
                 .getInventory();
         event.getPlayer().openInventory(menu);
     }

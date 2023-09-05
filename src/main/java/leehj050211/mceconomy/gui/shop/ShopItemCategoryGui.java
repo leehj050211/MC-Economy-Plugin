@@ -29,6 +29,7 @@ public class ShopItemCategoryGui {
 
     private final Player player;
     private final ShopCategory category;
+    private final boolean manageMode;
 
     public Inventory getInventory() {
         sgMenu = MenuProvider.pageableMenuGui().create(getMenuDepthTitle() + " ({currentPage}/{maxPage})", ROWS);
@@ -57,7 +58,7 @@ public class ShopItemCategoryGui {
     }
 
     private void selectItemCategory(ShopItemCategory itemCategory) {
-        Bukkit.getPluginManager().callEvent(new SelectShopItemCategoryEvent(player, itemCategory));
+        Bukkit.getPluginManager().callEvent(new SelectShopItemCategoryEvent(player, itemCategory, manageMode));
     }
 
     private String getMenuDepthTitle() {
@@ -69,7 +70,7 @@ public class ShopItemCategoryGui {
                 .name("&l이전 메뉴")
                 .build()
         ).withListener(event -> {
-            Bukkit.getPluginManager().callEvent(new OpenShopEvent(player));
+            Bukkit.getPluginManager().callEvent(new OpenShopEvent(player, manageMode));
         });
     }
 }

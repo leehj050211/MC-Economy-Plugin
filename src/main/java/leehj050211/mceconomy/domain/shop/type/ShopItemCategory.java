@@ -68,6 +68,7 @@ public enum ShopItemCategory {
     PLANT_CROPS(905, ShopCategory.PLANT, "작물", Material.PUMPKIN),
     CAVE_PLANTS(906, ShopCategory.PLANT, "동굴 식물", Material.BIG_DRIPLEAF),
     SHRUBBERY(907, ShopCategory.PLANT, "관목숲", Material.GRASS),
+    SEED(908, ShopCategory.PLANT, "씨앗", Material.BEETROOT_SEEDS),
 
     BASALT(1001, ShopCategory.NETHER, "현무암", Material.BASALT),
     BLACKSTONE(1002, ShopCategory.NETHER, "흑암", Material.BLACKSTONE),
@@ -125,7 +126,9 @@ public enum ShopItemCategory {
     PROJECTILE(1712, ShopCategory.TOOLS, "투사체", Material.ARROW),
 
     BOATS(1801, ShopCategory.TRANSPORTATION, "보트", Material.OAK_BOAT),
-    MINECARTS(1802, ShopCategory.TRANSPORTATION, "마인카트", Material.MINECART);
+    MINECARTS(1802, ShopCategory.TRANSPORTATION, "마인카트", Material.MINECART),
+
+    ETC(1901, ShopCategory.ETC, "기타 아이템", Material.STICK);;
 
     private final int value;
     private final ShopCategory parentCategory;

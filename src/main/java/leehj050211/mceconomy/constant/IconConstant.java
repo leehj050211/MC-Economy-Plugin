@@ -14,6 +14,9 @@ public class IconConstant {
     public static final String QUESTION_MARK = "2705fd94a0c431927fb4e639b0fcfb49717e412285a02b439e0112da22b2e2ec";
     public static final String WRONG_MARK = "27548362a24c0fa8453e4d93e68c5969ddbde57bf6666c0319c1ed1e84d89065";
 
+    public static final String PLUS = "60b55f74681c68283a1c1ce51f1c83b52e2971c91ee34efcb598df3990a7e7";
+    public static final String MINUS = "c3e4b533e4ba2dff7c0fa90f67e8bef36428b6cb06c45262631b0b25db85b";
+
     public static final String SHOP = "34ccb52750e97e830aebfa8a21d5da0d364d0fdad9fb0cc220fe2ca8411842c3";
 
     public static final String HEART = "2869bdd9a8f77eeff75d8f67ed0322bd9c16dd494972314ed707dd10a3139a58";

@@ -68,7 +68,7 @@ public class MainMenuGui {
                 .build();
         return new SGButton(icon)
                 .withListener(event -> {
-                    Bukkit.getPluginManager().callEvent(new OpenShopEvent(player));
+                    Bukkit.getPluginManager().callEvent(new OpenShopEvent(player, false));
                 });
     }
 

@@ -34,8 +34,8 @@ public class ShopUtil {
     private long calcPrice(ShopItemData itemData, long remainingAmount, int amount) {
         ShopPriceCategory priceCategory = itemData.getPriceCategory();
         if (remainingAmount > 0) {
-            return (long) (itemData.getPrice() * (priceCategory.getAvgAmount() / (remainingAmount * 1.0)) * amount);
+            return (long) (itemData.getTotalPrice() * (priceCategory.getAvgAmount() / (remainingAmount * 1.0)) * amount);
         }
-        return (long) ((itemData.getPrice() * priceCategory.getAvgAmount()) * Math.pow(1.5, Math.max(-remainingAmount + 1, 1)) * amount);
+        return (long) ((itemData.getTotalPrice() * priceCategory.getAvgAmount()) * Math.pow(1.5, Math.max(-remainingAmount + 1, 1)) * amount);
     }
 }

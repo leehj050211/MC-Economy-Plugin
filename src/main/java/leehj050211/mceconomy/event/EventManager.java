@@ -9,6 +9,7 @@ import leehj050211.mceconomy.event.player.listener.PlayerBlockBreakListener;
 import leehj050211.mceconomy.event.player.listener.PlayerJoinListener;
 import leehj050211.mceconomy.event.player.listener.PlayerKickListener;
 import leehj050211.mceconomy.event.player.listener.PlayerQuitListener;
+import leehj050211.mceconomy.event.shop.listener.OpenShopItemManageListener;
 import leehj050211.mceconomy.event.shop.listener.OpenShopListener;
 import leehj050211.mceconomy.event.shop.listener.OpenShopMaterialInfoListener;
 import leehj050211.mceconomy.event.shop.listener.OpenWholeSaleListener;
@@ -40,6 +41,7 @@ public class EventManager {
                 new SelectShopItemCategoryListener(),
                 new OpenShopMaterialInfoListener(),
                 new OpenWholeSaleListener(),
+                new OpenShopItemManageListener(),
                 new OpenGachaListener(),
                 new OpenStatListener()
         };

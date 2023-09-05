@@ -27,7 +27,7 @@ public class HibernateUtil {
                 .setProperty("hibernate.connection.username", user)
                 .setProperty("hibernate.connection.password", password)
                 .setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect")
-                .setProperty("hibernate.show_sql", "true")
+                .setProperty("hibernate.show_sql", "false")
                 .setProperty("hibernate.hbm2ddl.auto", "update")
                 .addAnnotatedClass(PlayerData.class)
                 .addAnnotatedClass(ShopPriceCategory.class)

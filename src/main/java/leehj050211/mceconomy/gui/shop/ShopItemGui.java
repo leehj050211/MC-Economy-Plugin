@@ -9,6 +9,7 @@ import leehj050211.mceconomy.domain.shop.ShopItemData;
 import leehj050211.mceconomy.domain.shop.ShopPriceCategory;
 import leehj050211.mceconomy.domain.shop.type.ShopItemCategory;
 import leehj050211.mceconomy.event.shop.OpenShopEvent;
+import leehj050211.mceconomy.event.shop.OpenShopItemManageEvent;
 import leehj050211.mceconomy.event.shop.SelectShopCategoryEvent;
 import leehj050211.mceconomy.global.shop.ShopManager;
 import leehj050211.mceconomy.global.util.CustomHeadUtil;
@@ -34,7 +35,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
-@RequiredArgsConstructor
 public class ShopItemGui implements Listener {
 
     private static final int ROWS = 3;
@@ -43,7 +43,14 @@ public class ShopItemGui implements Listener {
 
     private static final ShopManager shopManager = ShopManager.getInstance();
     private final ShopItemCategory itemCategory;
+    private boolean manageMode;
     private int amount = 1;
+
+    public ShopItemGui(Player player, ShopItemCategory itemCategory, boolean manageMode) {
+        this.player = player;
+        this.itemCategory = itemCategory;
+        this.manageMode = manageMode;
+    }
 
     public Inventory getInventory() {
         sgMenu = MenuProvider.pageableMenuGui().create(getMenuDepthTitle() + " ({currentPage}/{maxPage})", ROWS);
@@ -75,6 +82,7 @@ public class ShopItemGui implements Listener {
                 new ToolbarButton(5, getUpdateAmountButton(8)),
                 new ToolbarButton(6, getUpdateAmountButton(16)),
                 new ToolbarButton(7, getUpdateAmountButton(64)),
+                new ToolbarButton(8, getToggleManageModeButton())
         };
         sgMenu.setToolbarBuilder(new MenuToolbarProvider(2, 3, buttons));
         sgMenu.refreshInventory(player);
@@ -99,6 +107,11 @@ public class ShopItemGui implements Listener {
     }
 
     private void selectItem(InventoryClickEvent event, ShopItemData itemData, int amount) {
+        if (manageMode) {
+            Bukkit.getPluginManager().callEvent(new OpenShopItemManageEvent(player, itemData));
+            return;
+        }
+
         shopManager.buyItem(player, itemData.getMaterial(), amount);
         player.getInventory().addItem(new ItemStack(itemData.getMaterial(), amount));
         refresh();
@@ -119,10 +132,10 @@ public class ShopItemGui implements Listener {
         ).withListener(event -> {
             event.setResult(Event.Result.DENY);
             if (itemCategory.getParentCategory().hasChildCategory()) {
-                Bukkit.getPluginManager().callEvent(new SelectShopCategoryEvent(player, itemCategory.getParentCategory()));
+                Bukkit.getPluginManager().callEvent(new SelectShopCategoryEvent(player, itemCategory.getParentCategory(), manageMode));
                 return;
             }
-            Bukkit.getPluginManager().callEvent(new OpenShopEvent(player));
+            Bukkit.getPluginManager().callEvent(new OpenShopEvent(player, manageMode));
         });
     }
 
@@ -134,6 +147,20 @@ public class ShopItemGui implements Listener {
         ).withListener(event -> {
             event.setResult(Event.Result.DENY);
             this.amount = amount;
+            refresh();
+        });
+    }
+
+    private SGButton getToggleManageModeButton() {
+        if (!player.isOp()) {
+            return null;
+        }
+        return new SGButton(new ItemBuilder(Material.STICK)
+                .name(manageMode ? "관리모드 켜짐" : "관리모드 꺼짐")
+                .build()
+        ).withListener(event -> {
+            event.setResult(Event.Result.DENY);
+            manageMode = !manageMode;
             refresh();
         });
     }

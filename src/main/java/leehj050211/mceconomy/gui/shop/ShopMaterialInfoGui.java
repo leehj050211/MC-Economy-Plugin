@@ -29,6 +29,7 @@ public class ShopMaterialInfoGui {
     private static final int ROWS = 3;
     private final SGMenu sgMenu = MenuProvider.pageableMenuGui().create("메뉴 > 상점 > 원자재 정보 ({currentPage}/{maxPage})", ROWS);
     private final Player player;
+    private final boolean manageMode;
 
     private final ShopManager shopManager = ShopManager.getInstance();
 
@@ -65,7 +66,7 @@ public class ShopMaterialInfoGui {
                 .name("&l이전 메뉴")
                 .build()
         ).withListener(event -> {
-            Bukkit.getPluginManager().callEvent(new OpenShopEvent(player));
+            Bukkit.getPluginManager().callEvent(new OpenShopEvent(player, manageMode));
         });
     }
 }

@@ -53,7 +53,7 @@ public class StatUtil {
     }
 
     private void applyAttack(Player player, PlayerData data) {
-        double value = INITIAL_ATTACK_DAMAGE + (0.05 * (data.getArmorLevel() - 1));
+        double value = INITIAL_ATTACK_DAMAGE + (0.05 * (data.getAttackLevel() - 1));
         player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(value);
     }
 

@@ -15,6 +15,7 @@ public class SelectShopCategoryEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private final ShopCategory category;
+    private final boolean manageMode;
 
     @Override
     public @NotNull HandlerList getHandlers() {

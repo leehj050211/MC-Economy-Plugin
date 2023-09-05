@@ -23,6 +23,14 @@ public class ShopItemDao {
 
     private final SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
+    public void update(ShopItemData itemData) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        session.merge(itemData);
+        transaction.commit();
+        session.close();
+    }
+
     public void updateAll(List<ShopItemData> itemDataList) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();

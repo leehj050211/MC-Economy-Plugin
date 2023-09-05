@@ -28,7 +28,7 @@ public enum ShopCategory {
     FOOD("음식", Material.APPLE, true),
     TOOLS("장비", Material.DIAMOND_PICKAXE, true),
     TRANSPORTATION("수송", Material.MINECART, true),
-    ETC("기타", Material.STICK, true);
+    ETC("기타", Material.STICK, false);
 
     private final String name;
     private final Material icon;

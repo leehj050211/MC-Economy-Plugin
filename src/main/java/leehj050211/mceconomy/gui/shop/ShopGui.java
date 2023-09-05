@@ -31,6 +31,7 @@ public class ShopGui {
     private final SGMenu sgMenu = MenuProvider.pageableMenuGui().create("메뉴 > 상점 ({currentPage}/{maxPage})", ROWS);
 
     private final Player player;
+    private final boolean manageMode;
 
     public Inventory getInventory() {
         sgMenu.setAutomaticPaginationEnabled(true);
@@ -59,11 +60,11 @@ public class ShopGui {
 
     private void selectCategory(ShopCategory category) {
         if (category.hasChildCategory()) {
-            Bukkit.getPluginManager().callEvent(new SelectShopCategoryEvent(player, category));
+            Bukkit.getPluginManager().callEvent(new SelectShopCategoryEvent(player, category, manageMode));
             return;
         }
         ShopItemCategory itemCategory = ShopItemCategory.valueOf(category.name());
-        Bukkit.getPluginManager().callEvent(new SelectShopItemCategoryEvent(player, itemCategory));
+        Bukkit.getPluginManager().callEvent(new SelectShopItemCategoryEvent(player, itemCategory, false));
     }
 
     private SGButton getMaterialInfoButton() {
@@ -71,7 +72,7 @@ public class ShopGui {
                 .name("&l원자재 정보")
                 .build()
         ).withListener(event -> {
-            Bukkit.getPluginManager().callEvent(new OpenShopMaterialInfoEvent(player));
+            Bukkit.getPluginManager().callEvent(new OpenShopMaterialInfoEvent(player, manageMode));
         });
     }
 
