@@ -5,6 +5,7 @@ import leehj050211.mceconomy.event.gacha.listener.OpenGachaListener;
 import leehj050211.mceconomy.event.job.listener.OpenJobMenuListener;
 import leehj050211.mceconomy.event.job.listener.OpenSelectJobListener;
 import leehj050211.mceconomy.event.menu.listener.OpenMenuListener;
+import leehj050211.mceconomy.event.player.listener.PlayerBlockBreakListener;
 import leehj050211.mceconomy.event.player.listener.PlayerJoinListener;
 import leehj050211.mceconomy.event.player.listener.PlayerKickListener;
 import leehj050211.mceconomy.event.player.listener.PlayerQuitListener;
@@ -30,6 +31,7 @@ public class EventManager {
                 new PlayerJoinListener(),
                 new PlayerQuitListener(),
                 new PlayerKickListener(),
+                new PlayerBlockBreakListener(),
                 new OpenMenuListener(),
                 new OpenJobMenuListener(),
                 new OpenSelectJobListener(),
